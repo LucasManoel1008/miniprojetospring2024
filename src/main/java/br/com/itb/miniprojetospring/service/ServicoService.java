@@ -31,8 +31,8 @@ public class ServicoService {
     }
     @Transactional
     public Servico update(Servico _servico){
-        Servico servicoEncontrado = servicoRepository.findAllById(_servico.getId_servicos());
-        if (servicoEncontrado.getId_servicos() > 0)
+        Servico servicoEncontrado = servicoRepository.findAllById(_servico.getId());
+        if (servicoEncontrado.getId() > 0)
             return  servicoRepository.save(servicoEncontrado);
         else
            return new Servico(0, "Servico não encontrado");
@@ -41,9 +41,9 @@ public class ServicoService {
     @Transactional
     public boolean delete(Servico _servico){
         boolean sucesso = false;
-        Servico servicoEnncontrado = servicoRepository.findAllById(_servico.getId_servicos());
-        if(servicoEnncontrado.getId_servicos() > 0){
-            servicoRepository.deleteById(servicoEnncontrado.getId_servicos());
+        Servico servicoEnncontrado = servicoRepository.findAllById(_servico.getId());
+        if(servicoEnncontrado.getId() > 0){
+            servicoRepository.deleteById(servicoEnncontrado.getId());
             sucesso = true;
         }
         return sucesso;

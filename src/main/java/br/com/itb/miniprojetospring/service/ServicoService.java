@@ -30,22 +30,23 @@ public class ServicoService {
         return servicoEncontrado;
     }
     @Transactional
-    public Servico update(Servico _servico){
-        Servico servicoEncontrado = servicoRepository.findAllById(_servico.getId());
-        if (servicoEncontrado.getId() > 0)
-            return  servicoRepository.save(servicoEncontrado);
-        else
-           return new Servico(0, "Servico não encontrado");
-
+    public Servico update(Servico _servico) {
+        return servicoRepository.findById(_servico.getId())
+                .map(servicoEncontrado -> {
+                    servicoEncontrado.setNome_servico(_servico.getNome_servico());
+                    servicoEncontrado.setDescricao_servico(_servico.getDescricao_servico());
+                    return servicoRepository.save(servicoEncontrado);
+                })
+                .orElse(null);
     }
+
     @Transactional
-    public boolean delete(Servico _servico){
-        boolean sucesso = false;
-        Servico servicoEnncontrado = servicoRepository.findAllById(_servico.getId());
-        if(servicoEnncontrado.getId() > 0){
-            servicoRepository.deleteById(servicoEnncontrado.getId());
-            sucesso = true;
-        }
-        return sucesso;
+    public boolean delete(Servico _servico) {
+        return servicoRepository.findById(_servico.getId())
+                .map(servicoEncontrado -> {
+                    servicoRepository.delete(servicoEncontrado);
+                    return true;
+                })
+                .orElse(false);
     }
 }

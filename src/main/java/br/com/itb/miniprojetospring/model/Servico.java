@@ -3,15 +3,17 @@ package br.com.itb.miniprojetospring.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Servicos")
+@Table(name = "Servico")
 public class Servico {
     Servico(){
 
     }
-    public Servico(long id, String nome_servico){
+    public Servico(long id, String nome_servico, String descricao_servico){
         this.nome_servico = nome_servico;
+        this.descricao_servico = descricao_servico;
         this.id = id;
     }
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

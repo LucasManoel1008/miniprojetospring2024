@@ -23,12 +23,12 @@ public class Servico {
 //    Getter's e Setter's
 
 
-    public long getId_servicos() {
+    public long getId() {
         return id;
     }
 
-    public void setId_servicos(long id_servicos) {
-        this.id = id_servicos;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getNome_servico() {

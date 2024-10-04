@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -32,13 +33,16 @@ public class Empresa {
 
     private byte[] foto;
     
-    private String email_empresa;
-    
-    private String cidade_empresa;
+    private String rua;
+    private String numero;
+    private String bairro;
+    private String cidade;
+    private String cep;
+
     
     private String descricao_empresa;
 
-    private Date data_criacao;
+    private LocalDateTime data_criacao;
 
 
 
@@ -76,21 +80,7 @@ public class Empresa {
         this.foto = foto;
     }
 
-    public String getEmail_empresa() {
-        return email_empresa;
-    }
 
-    public void setEmail_empresa(String email_empresa) {
-        this.email_empresa = email_empresa;
-    }
-
-    public String getCidade_empresa() {
-        return cidade_empresa;
-    }
-
-    public void setCidade_empresa(String cidade_empresa) {
-        this.cidade_empresa = cidade_empresa;
-    }
 
     public String getDescricao_empresa() {
         return descricao_empresa;
@@ -100,12 +90,51 @@ public class Empresa {
         this.descricao_empresa = descricao_empresa;
     }
 
-    public Date getData_criacao() {
+    public LocalDateTime getData_criacao() {
         return data_criacao;
     }
-
-    public void setData_criacao(Date data_criacao) {
+    public void setData_criacao(LocalDateTime data_criacao) {
         this.data_criacao = data_criacao;
+    }
+
+    public String getRua() {
+        return rua;
+    }
+
+    public void setRua(String rua) {
+        this.rua = rua;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
+    public String getBairro() {
+        return bairro;
+    }
+
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
+    }
+
+    public String getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
+    }
+
+    public String getCep() {
+        return cep;
+    }
+
+    public void setCep(String cep) {
+        this.cep = cep;
     }
 }
 

@@ -1,10 +1,6 @@
 package br.com.itb.miniprojetospring.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.Date;
 
@@ -28,6 +24,10 @@ public class Usuario {
 	private String nome;
 
 	private String ultimonome_usuario;
+	// Chave Estrangeira - Empresa
+	@OneToOne
+	@JoinColumn(name = "id_empresa")
+	private Empresa empresa;
 
 	private Date data_nascimento;
 	private String senha_usuario;

@@ -15,8 +15,7 @@ public class Orcamento {
     Orcamento(){
 
     }
-    public Orcamento(long id, String nome_orcamento){
-        this.nome_orcamento = nome_orcamento;
+    public Orcamento(long id){
         this.id = id;
     }
 
@@ -25,6 +24,7 @@ public class Orcamento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private long id;
+
 
     private double valor_servico;
 

@@ -18,8 +18,8 @@ public class ServicoController {
         this.servicoService = _serviceService;
     }
     @PostMapping
-    public ResponseEntity<Object> saveService(@RequestBody Servico service){
-        return ResponseEntity.status(HttpStatus.CREATED).body(servicoService.save(service));
+    public ResponseEntity<Object> saveService(@RequestBody Servico servico){
+        return ResponseEntity.status(HttpStatus.CREATED).body(servicoService.save(servico));
     }
     @GetMapping
     public ResponseEntity<List<Servico>> getAllServicos(){

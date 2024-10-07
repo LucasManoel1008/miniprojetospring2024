@@ -20,6 +20,10 @@ public class Servico {
     private long id;
     private String nome_servico;
     private String descricao_servico;
+    // Chave Estrangeira - Empresa
+    @OneToOne
+    @JoinColumn(name = "id_empresa")
+    private Empresa id_empresa;
 
 
 //    Getter's e Setter's

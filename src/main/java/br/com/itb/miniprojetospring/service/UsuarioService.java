@@ -3,9 +3,10 @@ package br.com.itb.miniprojetospring.service;
 import br.com.itb.miniprojetospring.model.Usuario;
 import br.com.itb.miniprojetospring.model.UsuarioRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Service
 public class UsuarioService {
     final UsuarioRepository usuarioRepository;
 

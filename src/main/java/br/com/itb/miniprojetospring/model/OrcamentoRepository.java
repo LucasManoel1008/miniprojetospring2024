@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OrcamentoRepository
-        extends JpaRepository <Orcamento,Long>{
+		extends JpaRepository <Orcamento,Long>{
 	Orcamento findAllById(Long id);
 }

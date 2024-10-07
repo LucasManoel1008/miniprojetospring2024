@@ -1,11 +1,8 @@
 package br.com.itb.miniprojetospring.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -20,15 +17,24 @@ public class Orcamento {
     }
 
     @Id
-
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private long id;
+
+    @OneToOne
+    @JoinColumn(name = "id_servico")
+    private Servico id_servico;
+
+    @OneToOne
+    @JoinColumn(name = "id_usuario")
+    private Usuario id_usuario;
+    @OneToOne
+    @JoinColumn(name = "id_empresa")
+    private Empresa id_empresa;
 
 
     private double valor_servico;
 
-    private Date data_assinatura;
+    private LocalDateTime data_assinatura;
 
 
 
@@ -52,11 +58,11 @@ public class Orcamento {
         this.valor_servico = valor_servico;
     }
 
-    public Date getData_assinatura() {
+    public LocalDateTime getData_assinatura() {
         return data_assinatura;
     }
 
-    public void setData_assinatura(Date data_assinatura) {
+    public void setData_assinatura(LocalDateTime data_assinatura) {
         this.data_assinatura = data_assinatura;
     }
 }

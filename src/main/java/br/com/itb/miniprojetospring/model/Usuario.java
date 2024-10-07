@@ -27,7 +27,7 @@ public class Usuario {
 	// Chave Estrangeira - Empresa
 	@OneToOne
 	@JoinColumn(name = "id_empresa")
-	private Empresa empresa;
+	private Empresa id_empresa;
 
 	private Date data_nascimento;
 	private String senha_usuario;

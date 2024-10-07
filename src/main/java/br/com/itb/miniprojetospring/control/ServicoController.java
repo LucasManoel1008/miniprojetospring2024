@@ -21,7 +21,7 @@ public class ServicoController {
     public ResponseEntity<Object> saveService(@RequestBody Servico servico){
         return ResponseEntity.status(HttpStatus.CREATED).body(servicoService.save(servico));
     }
-    @GetMapping
+    @GetMapping("/{id}")
     public ResponseEntity<List<Servico>> getAllServicos(){
         return ResponseEntity.status(HttpStatus.OK).body(servicoService.findAll());
     }

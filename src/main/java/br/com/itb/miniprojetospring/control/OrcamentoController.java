@@ -1,6 +1,7 @@
 package br.com.itb.miniprojetospring.control;
 
 import br.com.itb.miniprojetospring.model.Orcamento;
+import br.com.itb.miniprojetospring.model.Servico;
 import br.com.itb.miniprojetospring.service.OrcamentoService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,10 @@ public class OrcamentoController {
     @GetMapping("/{id}")
     public ResponseEntity<List<Orcamento>> getALlOrcamento(){
         return ResponseEntity.status(HttpStatus.OK).body(orcamentoService.findAll());
+    }
+    @PutMapping
+    public ResponseEntity<Object> updateOrcamento(@RequestBody Orcamento orcamento){
+        return ResponseEntity.status(HttpStatus.CREATED).body(orcamentoService.update(orcamento));
     }
 
     @DeleteMapping

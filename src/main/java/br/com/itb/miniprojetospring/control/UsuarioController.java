@@ -18,19 +18,19 @@ public class UsuarioController {
         this.usuarioService = _usuarioService;
     }
     @PostMapping
-    public ResponseEntity<Object> saveUsuario(@RequestBody Usuario service){
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.save(service));
+    public ResponseEntity<Object> saveUsuario(@RequestBody Usuario usuario){
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.save(usuario));
     }
-    @GetMapping
+    @GetMapping("/{id}")
     public ResponseEntity<List<Usuario>> getAllUsuario(){
         return ResponseEntity.status(HttpStatus.OK).body(usuarioService.findAll());
     }
     @PutMapping
-    public ResponseEntity<Object> updateUsuario(@RequestBody Usuario service){
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.update(service));
+    public ResponseEntity<Object> updateUsuario(@RequestBody Usuario usuario){
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.update(usuario));
     }
     @DeleteMapping
-    public ResponseEntity<Object> deletarUsuario(@RequestBody Usuario service){
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.delete(service));
+    public ResponseEntity<Object> deletarUsuario(@RequestBody Usuario usuario){
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.delete(usuario));
     }
 }

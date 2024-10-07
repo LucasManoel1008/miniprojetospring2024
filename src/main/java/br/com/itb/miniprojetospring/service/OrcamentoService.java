@@ -2,6 +2,7 @@ package br.com.itb.miniprojetospring.service;
 
 import br.com.itb.miniprojetospring.model.Orcamento;
 import br.com.itb.miniprojetospring.model.OrcamentoRepository;
+import br.com.itb.miniprojetospring.model.Servico;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,15 @@ public class OrcamentoService {
     public Orcamento findAllById(Long id){
         Orcamento orcamentoEncontrado = orcamentoRepository.findAllById(id);
         return orcamentoEncontrado;
+    }
+    @Transactional
+    public Orcamento update(Orcamento _orcamento) {
+        return orcamentoRepository.findById(_orcamento.getId())
+                .map(servicoEncontrado -> {
+                    servicoEncontrado.setValor_servico(_orcamento.getValor_servico());
+                    return orcamentoRepository.save(servicoEncontrado);
+                })
+                .orElse(null);
     }
     @Transactional
     public boolean delete(Orcamento _orcamento){

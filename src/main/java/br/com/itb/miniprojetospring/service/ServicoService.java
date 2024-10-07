@@ -1,34 +1,34 @@
 package br.com.itb.miniprojetospring.service;
 
-
 import br.com.itb.miniprojetospring.model.Servico;
 import br.com.itb.miniprojetospring.model.ServicoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ServicoService {
     final ServicoRepository servicoRepository;
 
-    public ServicoService(ServicoRepository _servicoRepository){
+    public ServicoService(ServicoRepository _servicoRepository) {
         this.servicoRepository = _servicoRepository;
     }
 
     @Transactional
-    public Servico save(Servico _servico){
+    public Servico save(Servico _servico) {
         return servicoRepository.save(_servico);
     }
 
-    public List<Servico> findAll(){
-        List<Servico> lista = servicoRepository.findAll();
-        return  lista;
+    public List<Servico> findAll() {
+        return servicoRepository.findAll();
     }
-    public Servico findAllById(long id){
-        Servico servicoEncontrado = servicoRepository.findAllById(id);
-        return servicoEncontrado;
+
+    public Optional<Servico> findById(Long id) {
+        return servicoRepository.findById(id);
     }
+
     @Transactional
     public Servico update(Servico _servico) {
         return servicoRepository.findById(_servico.getId())
@@ -41,8 +41,8 @@ public class ServicoService {
     }
 
     @Transactional
-    public boolean delete(Servico _servico) {
-        return servicoRepository.findById(_servico.getId())
+    public boolean delete(Long id) {
+        return servicoRepository.findById(id)
                 .map(servicoEncontrado -> {
                     servicoRepository.delete(servicoEncontrado);
                     return true;

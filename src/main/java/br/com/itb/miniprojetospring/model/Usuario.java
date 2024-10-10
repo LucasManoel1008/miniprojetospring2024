@@ -12,27 +12,25 @@ public class Usuario {
 
 	}
 
-	public Usuario(long id, String nome){
+	public Usuario(long id, String nome_usuario){
 		this.id = id;
-		this.nome = nome;
+		this.nome_usuario = nome_usuario;
 	}
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long id;	
 
-	private String nome;
+	private String nome_usuario;
 
-	private String ultimonome_usuario;
+
 	// Chave Estrangeira - Empresa
-	@OneToOne
-	@JoinColumn(name = "id_empresa")
-	private Empresa id_empresa;
+
 
 	private Date data_nascimento;
 	private String senha_usuario;
 	private String email_usuario;		 
-	private String CPF;
+	private String cpf;
 	
 	private Date data_criacao_usuario;
 	
@@ -48,20 +46,14 @@ public class Usuario {
 	}
 
 	public String getNome() {
-		return nome;
+		return nome_usuario;
 	}
 
-	public void setNome(String nome) {
-		this.nome = nome;
+	public void setNome(String nome_usuario) {
+		this.nome_usuario = nome_usuario;
 	}
 
-	public String getUltimonome_usuario() {
-		return ultimonome_usuario;
-	}
 
-	public void setUltimonome_usuario(String ultimonome_usuario) {
-		this.ultimonome_usuario = ultimonome_usuario;
-	}
 
 	public Date getData_nascimento() {
 		return data_nascimento;
@@ -88,11 +80,11 @@ public class Usuario {
 	}
 
 	public String getCPF() {
-		return CPF;
+		return cpf;
 	}
 
-	public void setCPF(String CPF) {
-		this.CPF = CPF;
+	public void setCPF(String cpf) {
+		this.cpf = cpf;
 	}
 
 	public Date getData_criacao_usuario() {

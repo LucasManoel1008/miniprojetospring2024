@@ -31,7 +31,6 @@ public class UsuarioService {
         return usuarioRepository.findById(_usuario.getId())
                 .map(usuarioEncontrado -> {
                     usuarioEncontrado.setNome(_usuario.getNome());
-                    usuarioEncontrado.setUltimonome_usuario(_usuario.getUltimonome_usuario());
                     usuarioEncontrado.setSenha_usuario(_usuario.getSenha_usuario());
                     usuarioEncontrado.setEmail_usuario(_usuario.getEmail_usuario());
                     usuarioEncontrado.setCPF(_usuario.getCPF());

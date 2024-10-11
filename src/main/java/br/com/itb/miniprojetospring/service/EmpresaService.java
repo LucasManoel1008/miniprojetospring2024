@@ -4,12 +4,15 @@ import br.com.itb.miniprojetospring.model.Empresa;
 import br.com.itb.miniprojetospring.model.EmpresaRepository;
 import br.com.itb.miniprojetospring.model.Servico;
 import jakarta.transaction.Transactional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmpresaService {
+    @Autowired
     final EmpresaRepository empresaRepository;
 
     public EmpresaService(EmpresaRepository _empresaRepository){
@@ -23,6 +26,10 @@ public class EmpresaService {
     public List<Empresa> findAll(){
         List<Empresa> lista = empresaRepository.findAll();
         return lista;
+    }
+    public Optional<Empresa> findAllById(Long id) {
+        // Chamando o método correto do repositório
+        return empresaRepository.findById(id);
     }
     public Empresa findAllById(long id){
         Empresa empresaEncontrada = empresaRepository.findAllById(id);
@@ -39,6 +46,7 @@ public class EmpresaService {
                     empresaEncontrda.setBairro(_empresa.getBairro());
                     empresaEncontrda.setCidade(_empresa.getCidade());
                     empresaEncontrda.setCep(_empresa.getCep());
+                    empresaEncontrda.setCnpj(_empresa.getCnpj());
                     return empresaRepository.save(empresaEncontrda);
                 })
                 .orElse(null);

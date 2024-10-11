@@ -12,14 +12,14 @@ public class Usuario {
 
 	}
 
-	public Usuario(long id, String nome_usuario){
-		this.id = id;
+	public Usuario(Long cpf, String nome_usuario){
+		this.cpf =cpf;
 		this.nome_usuario = nome_usuario;
 	}
 	
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private long id;	
+	@Column(name = "cpf",  nullable = false)
+	private Long cpf;
 
 	private String nome_usuario;
 
@@ -30,26 +30,18 @@ public class Usuario {
 	private Date data_nascimento;
 	private String senha_usuario;
 	private String email_usuario;		 
-	private String cpf;
-	
+
+
 	private Date data_criacao_usuario;
 	
 	// CRIAR GETTERS E SETTERS
 
 
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public String getNome() {
+	public String getnome_usuario() {
 		return nome_usuario;
 	}
 
-	public void setNome(String nome_usuario) {
+	public void setNome_usuario(String nome_usuario) {
 		this.nome_usuario = nome_usuario;
 	}
 
@@ -79,11 +71,11 @@ public class Usuario {
 		this.email_usuario = email_usuario;
 	}
 
-	public String getCPF() {
+	public Long getCpf() {
 		return cpf;
 	}
 
-	public void setCPF(String cpf) {
+	public void setCpf(Long cpf) {
 		this.cpf = cpf;
 	}
 

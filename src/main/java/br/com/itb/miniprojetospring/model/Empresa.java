@@ -1,10 +1,6 @@
 package br.com.itb.miniprojetospring.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -22,9 +18,7 @@ public class Empresa {
     }
 
     @Id
-
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private long id;
 
     private String nome_empresa;
@@ -32,13 +26,15 @@ public class Empresa {
     private String telefone_empresa;
 
     private byte[] foto;
-    
+    private String cnpj;
     private String rua;
     private String numero;
     private String bairro;
     private String cidade;
     private String cep;
-
+    @OneToOne
+    @JoinColumn(name = "cpf_usuario")
+    private Usuario usuario;
     
     private String descricao_empresa;
 
@@ -47,6 +43,23 @@ public class Empresa {
 
 
 //    Getter's e Setter's
+
+
+    public String getCnpj() {
+        return cnpj;
+    }
+
+    public void setCnpj(String cnpj) {
+        this.cnpj = cnpj;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
 
     public long getId() {
         return id;

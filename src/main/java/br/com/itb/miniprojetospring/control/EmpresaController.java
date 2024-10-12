@@ -18,13 +18,14 @@ import java.util.Optional;
 public class EmpresaController {
 
     @Autowired
-    final EmpresaService empresaService;
+    private final EmpresaService empresaService;
 
     @Autowired
-    private UsuarioService usuarioService;
+    private final UsuarioService usuarioService;
 
-    public EmpresaController(EmpresaService _empresaService) {
-        this.empresaService = _empresaService;
+    public EmpresaController(EmpresaService empresaService, UsuarioService usuarioService) {
+        this.empresaService = empresaService;
+        this.usuarioService = usuarioService;
     }
 
     // Método para criar uma nova empresa
@@ -40,31 +41,27 @@ public class EmpresaController {
         }
     }
 
-
-    // Método para obter uma empresa pelo ID
-    @GetMapping("/{id}")
-    public ResponseEntity<Empresa> getEmpresa(@PathVariable Long id) {
-        Optional<Empresa> empresaOptional = empresaService.findAllById(id);
-        if (empresaOptional.isPresent()) {
-            return ResponseEntity.ok(empresaOptional.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+    // Método para obter uma empresa pelo CNPJ
+    @GetMapping("/{cnpj}")
+    public ResponseEntity<Empresa> getEmpresa(@PathVariable String cnpj) {
+        Optional<Empresa> empresaOptional = empresaService.findAllById(cnpj);
+        return empresaOptional.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     // Método para obter todas as empresas
     @GetMapping
     public ResponseEntity<List<Empresa>> getAllEmpresas() {
-        return ResponseEntity.status(HttpStatus.OK).body(empresaService.findAll());
+        return ResponseEntity.ok(empresaService.findAll());
     }
 
     @PutMapping
     public ResponseEntity<Object> updateEmpresa(@RequestBody Empresa empresa) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(empresaService.update(empresa));
+        return ResponseEntity.ok(empresaService.update(empresa));
     }
 
     @DeleteMapping
     public ResponseEntity<Object> deletarEmpresa(@RequestBody Empresa empresa) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(empresaService.delete(empresa));
+        return ResponseEntity.ok(empresaService.delete(empresa));
     }
 }

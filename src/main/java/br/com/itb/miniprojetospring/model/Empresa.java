@@ -1,47 +1,41 @@
 package br.com.itb.miniprojetospring.model;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
-import java.util.Date;
-
 
 @Entity
 @Table(name = "Empresa")
 public class Empresa {
-    Empresa(){
-
-    }
-    public Empresa(long id, String nome_empresa){
-        this.nome_empresa = nome_empresa;
-        this.id = id;
-    }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private String cnpj; // Alterado para String para suportar CNPJs com zeros à esquerda
 
     private String nome_empresa;
-
     private String telefone_empresa;
-
     private byte[] foto;
-    private String cnpj;
     private String rua;
     private String numero;
     private String bairro;
     private String cidade;
     private String cep;
+
     @OneToOne
     @JoinColumn(name = "cpf_usuario")
     private Usuario usuario;
-    
-    private String descricao_empresa;
 
+    private String descricao_empresa;
     private LocalDateTime data_criacao;
 
+    // Construtores
+    public Empresa() {
+        this.data_criacao = LocalDateTime.now(); // Define a data de criação automaticamente
+    }
 
-
+    public Empresa(String cnpj, String nome_empresa) {
+        this();
+        this.cnpj = cnpj;
+        this.nome_empresa = nome_empresa;
+    }
 //    Getter's e Setter's
 
 
@@ -59,14 +53,6 @@ public class Empresa {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getNome_empresa() {

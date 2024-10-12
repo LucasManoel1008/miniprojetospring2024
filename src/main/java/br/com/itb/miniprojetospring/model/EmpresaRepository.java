@@ -3,9 +3,9 @@ package br.com.itb.miniprojetospring.model;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface EmpresaRepository 
-	extends JpaRepository<Empresa, Long> {
-	Empresa findAllById(long id);
+import java.util.Optional;
 
+@Repository
+public interface EmpresaRepository extends JpaRepository<Empresa, String> { // Alterado para String
+	Optional<Empresa> findByCnpj(String cnpj); // Renomeado para refletir que busca por CNPJ
 }

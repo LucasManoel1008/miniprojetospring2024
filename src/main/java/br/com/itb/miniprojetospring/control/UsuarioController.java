@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*", maxAge = 3600, allowCredentials = "false")
 @RequestMapping("/usuario")
 public class UsuarioController {
     @Autowired
@@ -43,9 +43,15 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarioService.findAll());
     }
 
-    @PutMapping
-    public ResponseEntity<Object> updateUsuario(@RequestBody Usuario usuario) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.update(usuario));
+    @PutMapping("/{cpf}")
+    public ResponseEntity<Object> updateUsuario(@PathVariable String cpf, @RequestBody Usuario usuario) {
+        Optional<Usuario> usuarioOptional = usuarioService.findById(cpf);
+        if (usuarioOptional.isPresent()) {
+            usuario.setCpf(cpf); // Certifique-se de que o CPF no objeto é o correto.
+            return ResponseEntity.ok(usuarioService.update(usuario));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
+        }
     }
 
     @DeleteMapping("/{cpf}")

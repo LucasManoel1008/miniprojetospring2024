@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600, allowCredentials = "false")
+@CrossOrigin(origins = "http://localhost:5173", maxAge = 3600, allowCredentials = "false")
 @RequestMapping("/empresa")
 public class EmpresaController {
 
@@ -56,9 +56,16 @@ public class EmpresaController {
         return ResponseEntity.ok(empresaService.findAll());
     }
 
-    @PutMapping
-    public ResponseEntity<Object> updateEmpresa(@RequestBody Empresa empresa) {
-        return ResponseEntity.ok(empresaService.update(empresa));
+    @PutMapping("/{cnpj}")
+    public ResponseEntity<Object> updateEmpresa(@PathVariable String cnpj, @RequestBody Empresa empresa) {
+        Optional<Empresa> empresaOptional = empresaService.findAllById(cnpj);
+        if (empresaOptional.isPresent()) {
+            empresa.setCnpj(cnpj); // Certifique-se de que o CNPJ está setado
+            Empresa updatedEmpresa = empresaService.update(empresa);
+            return ResponseEntity.ok(updatedEmpresa);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Empresa não encontrada");
+        }
     }
 
     @DeleteMapping("/{cnpj}")

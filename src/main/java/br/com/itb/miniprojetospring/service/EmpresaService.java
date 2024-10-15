@@ -49,6 +49,7 @@ public class EmpresaService {
                     empresaEncontrada.setBairro(empresa.getBairro());
                     empresaEncontrada.setCidade(empresa.getCidade());
                     empresaEncontrada.setCep(empresa.getCep());
+                    empresaEncontrada.setTelefone_empresa((empresa.getTelefone_empresa()));
                     return empresaRepository.save(empresaEncontrada);
                 })
                 .orElse(null);

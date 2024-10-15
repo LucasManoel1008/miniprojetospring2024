@@ -31,6 +31,13 @@ public class EmpresaService {
         return empresaRepository.findByCnpj(cnpj); // Método simplificado
     }
 
+    public void deletarPorCnpj(String cnpj) {
+        Optional<Empresa> empresa = empresaRepository.findByCnpj(cnpj);
+        if (empresa.isPresent()) {
+            empresaRepository.delete(empresa.get());
+        }
+    }
+
     @Transactional
     public Empresa update(Empresa empresa) {
         return empresaRepository.findById(empresa.getCnpj())

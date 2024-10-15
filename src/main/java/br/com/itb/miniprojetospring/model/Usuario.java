@@ -11,7 +11,7 @@ public class Usuario {
 
 
 
-	public Usuario(Long cpf, String nome_usuario){
+	public Usuario(String cpf, String nome_usuario){
 		this.cpf =cpf;
 		this.nome_usuario = nome_usuario;
 	}
@@ -21,7 +21,7 @@ public class Usuario {
 	
 	@Id
 	@Column(name = "cpf",  nullable = false)
-	private Long cpf;
+	private String cpf;
 
 	private String nome_usuario;
 
@@ -73,11 +73,11 @@ public class Usuario {
 		this.email_usuario = email_usuario;
 	}
 
-	public Long getCpf() {
+	public String getCpf() {
 		return cpf;
 	}
 
-	public void setCpf(Long cpf) {
+	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
 

@@ -29,7 +29,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> getUsuario(@PathVariable Long cpf) {
+    public ResponseEntity<Usuario> getUsuario(@PathVariable String cpf) {
         Optional<Usuario> usuarioOptional = usuarioService.findById(cpf);
         if (usuarioOptional.isPresent()) {
             return ResponseEntity.ok(usuarioOptional.get());
@@ -48,8 +48,13 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.update(usuario));
     }
 
-    @DeleteMapping
-    public ResponseEntity<Object> deletarUsuario(@RequestBody Usuario usuario) {
-        return ResponseEntity.status(HttpStatus.OK).body(usuarioService.delete(usuario));
+    @DeleteMapping("/{cpf}")
+    public ResponseEntity<String> deletarEmpresa(@PathVariable String cpf) {
+        try {
+            usuarioService.deletarPorCpf(cpf);
+            return ResponseEntity.ok("Usuario deletado com sucesso");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao deletar o usuaio");
+        }
     }
 }

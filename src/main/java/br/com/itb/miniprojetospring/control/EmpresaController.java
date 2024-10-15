@@ -30,9 +30,10 @@ public class EmpresaController {
 
     // Método para criar uma nova empresa
     @PostMapping
-    public ResponseEntity<Empresa> createEmpresa(@RequestBody Empresa empresa, @RequestParam Long cpfUsuario) {
-        Usuario usuario = usuarioService.findByCpf(cpfUsuario);
-        if (usuario != null) {
+    public ResponseEntity<Empresa> createEmpresa(@RequestBody Empresa empresa, @RequestParam String cpfUsuario) {
+        Optional<Usuario> usuarioOptional = usuarioService.findByCpf(cpfUsuario);
+        if (usuarioOptional.isPresent()) {
+            Usuario usuario = usuarioOptional.get();
             empresa.setUsuario(usuario);
             empresaService.save(empresa);
             return ResponseEntity.ok(empresa);
@@ -60,8 +61,13 @@ public class EmpresaController {
         return ResponseEntity.ok(empresaService.update(empresa));
     }
 
-    @DeleteMapping
-    public ResponseEntity<Object> deletarEmpresa(@RequestBody Empresa empresa) {
-        return ResponseEntity.ok(empresaService.delete(empresa));
+    @DeleteMapping("/{cnpj}")
+    public ResponseEntity<String> deletarEmpresa(@PathVariable String cnpj) {
+        try {
+            empresaService.deletarPorCnpj(cnpj);
+            return ResponseEntity.ok("Empresa deletada com sucesso");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao deletar empresa");
+        }
     }
 }

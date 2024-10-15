@@ -1,5 +1,6 @@
 package br.com.itb.miniprojetospring.service;
 
+import br.com.itb.miniprojetospring.model.Empresa;
 import br.com.itb.miniprojetospring.model.Usuario;
 import br.com.itb.miniprojetospring.model.UsuarioRepository;
 import jakarta.transaction.Transactional;
@@ -22,14 +23,21 @@ public class UsuarioService {
     public Usuario save(Usuario _usuario){
         return usuarioRepository.save(_usuario);
     }
-    public Usuario findByCpf(Long cpf) {
+    public Optional<Usuario> findByCpf(String cpf) {
         return usuarioRepository.findByCpf(cpf);
     }
     public List<Usuario> findAll(){
         return  usuarioRepository.findAll();
     }
-    public Optional<Usuario> findById(Long cpf){
+    public Optional<Usuario> findById(String cpf){
         return usuarioRepository.findById(cpf);
+    }
+
+    public void deletarPorCpf(String cpf) {
+        Optional<Usuario> usuario = usuarioRepository.findByCpf(cpf);
+        if (usuario.isPresent()) {
+            usuarioRepository.delete(usuario.get());
+        }
     }
 
     public Usuario update(Usuario _usuario) {

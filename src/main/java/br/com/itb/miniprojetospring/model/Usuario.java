@@ -2,19 +2,21 @@ package br.com.itb.miniprojetospring.model;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
 @Table(name="Usuario")
 public class Usuario {
 
-	Usuario(){
 
-	}
 
 	public Usuario(Long cpf, String nome_usuario){
 		this.cpf =cpf;
 		this.nome_usuario = nome_usuario;
+	}
+	public Usuario() {
+		this.data_criacao_usuario = LocalDateTime.now(); // Define a data de criação automaticamente
 	}
 	
 	@Id
@@ -32,7 +34,7 @@ public class Usuario {
 	private String email_usuario;		 
 
 
-	private Date data_criacao_usuario;
+	private LocalDateTime data_criacao_usuario;
 	
 	// CRIAR GETTERS E SETTERS
 
@@ -79,11 +81,11 @@ public class Usuario {
 		this.cpf = cpf;
 	}
 
-	public Date getData_criacao_usuario() {
+	public LocalDateTime getData_criacao_usuario() {
 		return data_criacao_usuario;
 	}
 
-	public void setData_criacao_usuario(Date data_criacao_usuario) {
+	public void setData_criacao_usuario(LocalDateTime data_criacao_usuario) {
 		this.data_criacao_usuario = data_criacao_usuario;
 	}
 }

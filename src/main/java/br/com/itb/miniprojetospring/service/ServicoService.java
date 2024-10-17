@@ -18,6 +18,8 @@ public class ServicoService {
 
     @Transactional
     public Servico save(Servico _servico) {
+        // Log para verificar os dados do serviço que está sendo salvo
+        System.out.println("Salvando serviço: " + _servico);
         return servicoRepository.save(_servico);
     }
 

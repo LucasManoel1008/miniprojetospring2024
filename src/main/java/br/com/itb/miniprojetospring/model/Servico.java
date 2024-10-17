@@ -21,9 +21,9 @@ public class Servico {
     private String nome_servico;
     private String descricao_servico;
     // Chave Estrangeira - Empresa
-    @OneToOne
-    @JoinColumn(name = "id_empresa")
-    private Empresa id_empresa;
+    @ManyToOne
+    @JoinColumn(name = "cnpj_empresa", referencedColumnName = "cnpj")
+    private Empresa empresa;
 
 
 //    Getter's e Setter's
@@ -31,6 +31,10 @@ public class Servico {
 
     public long getId() {
         return id;
+    }
+
+    public Empresa getEmpresa() {
+        return empresa;
     }
 
     public void setId(long id) {
@@ -51,5 +55,8 @@ public class Servico {
 
     public void setDescricao_servico(String descricao_servico) {
         this.descricao_servico = descricao_servico;
+    }
+
+    public void setEmpresa(Empresa empresa) {
     }
 }

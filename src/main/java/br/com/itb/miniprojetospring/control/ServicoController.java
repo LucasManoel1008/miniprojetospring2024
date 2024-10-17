@@ -1,7 +1,10 @@
 package br.com.itb.miniprojetospring.control;
 
+import br.com.itb.miniprojetospring.model.Empresa;
 import br.com.itb.miniprojetospring.model.Servico;
+import br.com.itb.miniprojetospring.service.EmpresaService;
 import br.com.itb.miniprojetospring.service.ServicoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,15 +16,35 @@ import java.util.Optional;
 @CrossOrigin(origins = "*", maxAge = 3600, allowCredentials = "false")
 @RequestMapping("/servico")
 public class ServicoController {
-    final ServicoService servicoService;
+    @Autowired
+    private final ServicoService servicoService;
 
-    public ServicoController(ServicoService _serviceService){
-        this.servicoService = _serviceService;
+    @Autowired
+    private final EmpresaService empresaService;
+
+    public ServicoController(ServicoService servicoService, EmpresaService empresaService) {
+        this.servicoService = servicoService;
+        this.empresaService = empresaService;
     }
 
     @PostMapping
-    public ResponseEntity<Object> saveService(@RequestBody Servico servico){
-        return ResponseEntity.status(HttpStatus.CREATED).body(servicoService.save(servico));
+    public ResponseEntity<Servico> createServico(@RequestBody Servico servico, @RequestParam String cnpjEmpresa) {
+        Optional<Empresa> empresaOptional = empresaService.findAllById(cnpjEmpresa);
+        if (empresaOptional.isPresent()) {
+            Empresa empresa = empresaOptional.get();
+            servico.setEmpresa(empresa);
+
+            // Log para verificar a empresa associada
+            System.out.println("Empresa associada ao serviço: " + empresa);
+
+            Servico servicoSalvo = servicoService.save(servico);
+
+            // Log para verificar o serviço salvo
+            System.out.println("Serviço salvo: " + servicoSalvo);
+            return ResponseEntity.ok(servicoSalvo);
+        } else {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @GetMapping("/{id}")
@@ -40,12 +63,12 @@ public class ServicoController {
     }
 
     @PutMapping
-    public ResponseEntity<Object> updateServico(@RequestBody Servico servico){
+    public ResponseEntity<Object> updateServico(@RequestBody Servico servico) {
         return ResponseEntity.ok(servicoService.update(servico));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteServico(@PathVariable Long id){
+    public ResponseEntity<Object> deleteServico(@PathVariable Long id) {
         servicoService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

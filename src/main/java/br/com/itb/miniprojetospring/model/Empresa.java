@@ -8,10 +8,11 @@ import java.time.LocalDateTime;
 public class Empresa {
 
     @Id
-    private String cnpj; // Alterado para String para suportar CNPJs com zeros à esquerda
+    private String cnpj;
 
     private String nome_empresa;
     private String telefone_empresa;
+    @Column(name = "logo_empresa")
     private byte[] foto;
     private String rua;
     private String numero;

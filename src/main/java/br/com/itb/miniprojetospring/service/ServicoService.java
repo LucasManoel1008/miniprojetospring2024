@@ -40,9 +40,10 @@ public class ServicoService {
                     servicoEncontrado.setCategoria_servico(_servico.getCategoria_servico());
                     servicoEncontrado.setDisponibilidade_servico(_servico.getDisponibilidade_servico());
                     servicoEncontrado.setImagem_servico(_servico.getImagem_servico());
-                    servicoEncontrado.setMateriais_servico(_servico.getMateriais_servico());
                     servicoEncontrado.setLocal_servico(_servico.getLocal_servico());
                     servicoEncontrado.setValor_estimado_servico(_servico.getValor_estimado_servico());
+                    servicoEncontrado.setStatus_servico(_servico.getStatus_servico());
+                    servicoEncontrado.setCriterios_servico(_servico.getCriterios_servico());
                     return servicoRepository.save(servicoEncontrado);
                 })
                 .orElse(null);

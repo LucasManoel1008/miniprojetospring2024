@@ -25,18 +25,29 @@ public class Servico {
     private String categoria_servico;
     private String local_servico;
     private Date disponibilidade_servico;
-    private String materiais_servico;
     private byte[] imagem_servico;
     private String valor_estimado_servico;
+    private String criterios_servico;
     // Chave Estrangeira - Empresa
     @ManyToOne
     @JoinColumn(name = "cnpj_empresa", referencedColumnName = "cnpj")
     private Empresa empresa;
-
+    
+    private Boolean status_servico;
 
 //    Getter's e Setter's
-
-
+    public String getCriterios_servico() {
+        return criterios_servico;
+    }
+    public void setCriterios_servico(String criterios_servico) {
+        this.criterios_servico = criterios_servico;
+    }
+    public Boolean getStatus_servico() {
+        return status_servico;
+    }
+    public void setStatus_servico(Boolean status_servico) {
+        this.status_servico = status_servico;
+    }
     public String getCategoria_servico() {
         return categoria_servico;
     }
@@ -61,13 +72,7 @@ public class Servico {
         this.disponibilidade_servico = disponibilidade_servico;
     }
 
-    public String getMateriais_servico() {
-        return materiais_servico;
-    }
 
-    public void setMateriais_servico(String materiais_servico) {
-        this.materiais_servico = materiais_servico;
-    }
 
     public byte[] getImagem_servico() {
         return imagem_servico;

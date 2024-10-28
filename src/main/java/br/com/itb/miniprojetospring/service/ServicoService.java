@@ -1,5 +1,6 @@
 package br.com.itb.miniprojetospring.service;
 
+import br.com.itb.miniprojetospring.model.Empresa;
 import br.com.itb.miniprojetospring.model.Servico;
 import br.com.itb.miniprojetospring.model.ServicoRepository;
 import jakarta.transaction.Transactional;
@@ -11,7 +12,9 @@ import java.util.Optional;
 @Service
 public class ServicoService {
     final ServicoRepository servicoRepository;
-
+    public List<Servico> findAllByEmpresa(Empresa empresa) {
+        return servicoRepository.findAllByEmpresa(empresa);
+    }
     public ServicoService(ServicoRepository _servicoRepository) {
         this.servicoRepository = _servicoRepository;
     }

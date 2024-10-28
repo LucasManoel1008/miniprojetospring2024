@@ -27,6 +27,7 @@ public class ServicoController {
         this.empresaService = empresaService;
     }
 
+
     @PostMapping
     public ResponseEntity<Servico> createServico(@RequestBody Servico servico, @RequestParam String cnpjEmpresa) {
         Optional<Empresa> empresaOptional = empresaService.findAllById(cnpjEmpresa);
@@ -71,5 +72,19 @@ public class ServicoController {
     public ResponseEntity<Object> deleteServico(@PathVariable Long id) {
         servicoService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+    @DeleteMapping
+    public ResponseEntity<Void> deleteServicosByEmpresa(@RequestParam String cnpjEmpresa) {
+        Optional<Empresa> empresaOptional = empresaService.findAllById(cnpjEmpresa);
+        if (empresaOptional.isPresent()) {
+            Empresa empresa = empresaOptional.get();
+            List<Servico> servicos = servicoService.findAllByEmpresa(empresa);
+            for (Servico servico : servicos) {
+                servicoService.delete(servico.getId());
+            }
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 }

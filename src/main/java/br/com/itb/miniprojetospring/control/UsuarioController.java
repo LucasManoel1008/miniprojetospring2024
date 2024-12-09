@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "*", maxAge = 3600, allowCredentials = "false")
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/usuario")
 public class UsuarioController {
     @Autowired

@@ -73,9 +73,24 @@ public class ServicoController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    @PutMapping
-    public ResponseEntity<Object> updateServico(@RequestBody Servico servico) {
-        return ResponseEntity.ok(servicoService.update(servico));
+    @PutMapping("/{id}")
+    public ResponseEntity<Object> updateServico(@PathVariable Long id, @RequestBody Servico servico) {
+        Optional<Servico> servicoOptional = servicoService.findById(id);
+        if (servicoOptional.isPresent()) {
+            Servico existingServico = servicoOptional.get();
+            existingServico.setNome_servico(servico.getNome_servico());
+            existingServico.setDescricao_servico(servico.getDescricao_servico());
+            existingServico.setCategoria_servico(servico.getCategoria_servico());
+            existingServico.setCriterios_servico(servico.getCriterios_servico());
+            existingServico.setStatus_servico(servico.getStatus_servico());
+            existingServico.setDisponibilidade_servico(servico.getDisponibilidade_servico());
+            existingServico.setLocal_servico(servico.getLocal_servico());
+            existingServico.setValor_estimado_servico(servico.getValor_estimado_servico());
+            servicoService.update(existingServico);
+            return ResponseEntity.ok(existingServico);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @DeleteMapping("/{id}")

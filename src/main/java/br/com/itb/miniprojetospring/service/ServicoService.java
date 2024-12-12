@@ -25,7 +25,9 @@ public class ServicoService {
         System.out.println("Salvando serviço: " + _servico);
         return servicoRepository.save(_servico);
     }
-
+    public List<Servico> findByEmpresa(Empresa empresa) {
+        return servicoRepository.findByEmpresa(empresa);
+    }
     public List<Servico> findAll() {
         return servicoRepository.findAll();
     }

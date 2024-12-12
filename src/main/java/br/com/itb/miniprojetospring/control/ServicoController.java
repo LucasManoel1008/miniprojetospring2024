@@ -62,7 +62,17 @@ public class ServicoController {
     public ResponseEntity<List<Servico>> getAllServicos() {
         return ResponseEntity.ok(servicoService.findAll());
     }
-
+    @GetMapping("/empresa/{cnpj}")
+    public ResponseEntity<List<Servico>> getServicosByEmpresa(@PathVariable String cnpj) {
+        Optional<Empresa> empresaOptional = empresaService.findAllById(cnpj);
+        if (empresaOptional.isPresent()) {
+            Empresa empresa = empresaOptional.get();
+            List<Servico> servicos = servicoService.findByEmpresa(empresa);
+            return new ResponseEntity<>(servicos, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
     @PutMapping
     public ResponseEntity<Object> updateServico(@RequestBody Servico servico) {
         return ResponseEntity.ok(servicoService.update(servico));

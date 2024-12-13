@@ -1,6 +1,5 @@
 package br.com.itb.miniprojetospring.control;
 
-import br.com.itb.miniprojetospring.model.Servico;
 import br.com.itb.miniprojetospring.model.Usuario;
 import br.com.itb.miniprojetospring.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +26,15 @@ public class UsuarioController {
     public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario) {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.save(usuario));
     }
-
+    @GetMapping("/{email}")
+    public ResponseEntity<Usuario> buscarPorEmail(@RequestParam String email_usuario){
+        Usuario usuario = usuarioService.findByEmailUsuario(email_usuario);
+        if (usuario !=null){
+            return ResponseEntity.ok(usuario);
+        }else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+    }
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> getUsuario(@PathVariable String cpf) {
         Optional<Usuario> usuarioOptional = usuarioService.findById(cpf);

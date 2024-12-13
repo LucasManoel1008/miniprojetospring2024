@@ -31,7 +31,8 @@ public class Usuario {
 
 	private Date data_nascimento;
 	private String senha_usuario;
-	private String email_usuario;		 
+	@Column(name = "email_usuario", nullable = false, unique = true, length = 100)
+	private String email;
 
 
 	private LocalDateTime data_criacao_usuario;
@@ -65,12 +66,12 @@ public class Usuario {
 		this.senha_usuario = senha_usuario;
 	}
 
-	public String getEmail_usuario() {
-		return email_usuario;
+	public String getEmail() {
+		return email;
 	}
 
-	public void setEmail_usuario(String email_usuario) {
-		this.email_usuario = email_usuario;
+	public void setEmail(String email) {
+		this.email = email;
 	}
 
 	public String getCpf() {

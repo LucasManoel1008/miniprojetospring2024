@@ -1,6 +1,5 @@
 package br.com.itb.miniprojetospring.service;
 
-import br.com.itb.miniprojetospring.model.Empresa;
 import br.com.itb.miniprojetospring.model.Usuario;
 import br.com.itb.miniprojetospring.model.UsuarioRepository;
 import jakarta.transaction.Transactional;
@@ -26,6 +25,9 @@ public class UsuarioService {
     public Optional<Usuario> findByCpf(String cpf) {
         return usuarioRepository.findByCpf(cpf);
     }
+    public Usuario findByEmailUsuario(String email_usuario){
+        return usuarioRepository.findByEmail(email_usuario).orElse(null);
+    }
     public List<Usuario> findAll(){
         return  usuarioRepository.findAll();
     }
@@ -45,7 +47,7 @@ public class UsuarioService {
                 .map(usuarioEncontrado -> {
                     usuarioEncontrado.setNome_usuario(_usuario.getnome_usuario());
                     usuarioEncontrado.setSenha_usuario(_usuario.getSenha_usuario());
-                    usuarioEncontrado.setEmail_usuario(_usuario.getEmail_usuario());
+                    usuarioEncontrado.setEmail(_usuario.getEmail());
                     usuarioEncontrado.setCpf(_usuario.getCpf());
                     return usuarioRepository.save(usuarioEncontrado);
                 })

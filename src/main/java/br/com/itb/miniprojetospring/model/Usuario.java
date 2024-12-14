@@ -36,6 +36,12 @@ public class Usuario {
 
 
 	private LocalDateTime data_criacao_usuario;
+	@Column(name = "senha_token", nullable = true, updatable = false)
+	private String senhaToken;
+	@Column(name = "expiracao_token", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false)
+	private LocalDateTime expiracao_token;
+	@Column(name = "token")
+	private String token;
 	
 	// CRIAR GETTERS E SETTERS
 
@@ -86,7 +92,34 @@ public class Usuario {
 		return data_criacao_usuario;
 	}
 
+	public String getSenhaToken() {
+		return senhaToken;
+	}
+
+	public void setSenhaToken(String senhaToken) {
+		this.senhaToken = senhaToken;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
+
 	public void setData_criacao_usuario(LocalDateTime data_criacao_usuario) {
 		this.data_criacao_usuario = data_criacao_usuario;
+	}
+
+	public LocalDateTime getExpiracao_token() {
+		return expiracao_token;
+	}
+
+	public void setExpiracao_token(LocalDateTime expiracao_token) {
+		this.expiracao_token = expiracao_token;
+	}
+	public boolean isTokenValido() {
+		return expiracao_token != null && LocalDateTime.now().isBefore(expiracao_token);
 	}
 }

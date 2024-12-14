@@ -26,7 +26,7 @@ public class UsuarioController {
     public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario) {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.save(usuario));
     }
-    @GetMapping("/{email}")
+    @GetMapping("/email/{email}")
     public ResponseEntity<Usuario> buscarPorEmail(@RequestParam String email_usuario){
         Usuario usuario = usuarioService.findByEmailUsuario(email_usuario);
         if (usuario !=null){

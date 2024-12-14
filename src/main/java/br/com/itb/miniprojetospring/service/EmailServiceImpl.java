@@ -32,7 +32,15 @@ public class EmailServiceImpl implements EmailService {
 
             messageHelper.setSubject("Recuperação de senha");
             messageHelper.setTo(email_usuario);
-            messageHelper.setText("Codigo para a restauracao da senha ," + token, true);
+            messageHelper.setText("<p>Olá "+ email_usuario+"!</p>"+
+                    "<p>Recebemos sua solicitação para um código de uso-único para <strong> redefinição de senha </strong>.</p>"+
+                    
+                    "<p>Seu código para a Restauração da senha: <strong>" + token + "</strong></p>." +
+                    "<p>Caso não temha solicitado esse código, apenas ignore esta mensagem </p>"+
+                    "</br>" +
+                    "<p>Agradecemos pela sua atenção,</p>"+
+                    "<p>Safe Solutions</p>",true);
+
 
             javaMailSender.send(mimeMessage);
             return token; // Retorna o token gerado

@@ -18,6 +18,10 @@ public class UsuarioService {
     final UsuarioRepository usuarioRepository;
     @Autowired
     private EmailService emailService;
+
+    @Autowired
+    private TokenService tokenService;
+
     private static final int TOKEN_LENGTH = 9;
 
     public UsuarioService(UsuarioRepository _usuarioRepository){
@@ -59,6 +63,7 @@ public class UsuarioService {
         for (int i = 0; i < TOKEN_LENGTH; i++) {
             token.append(caracteres.charAt(random.nextInt(caracteres.length())));
         }
+        tokenService.adicionarToken(String.valueOf(token));
         return token.toString();
     }
     public List<Usuario> findAll(){

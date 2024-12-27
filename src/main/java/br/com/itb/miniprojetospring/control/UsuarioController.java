@@ -38,9 +38,9 @@ public class UsuarioController {
         Optional<Usuario> usuarioOpt = usuarioService.buscarPorEmail(emailUsuario);
 
         if (usuarioOpt.isPresent()) {
-            Usuario usuario = usuarioOpt.get(); // Desembrulha o Optional
+            Usuario usuario = usuarioOpt.get();
 
-            LocalDateTime expiracao = LocalDateTime.now().plusMinutes(10); // Define 30 minutos de validade
+            LocalDateTime expiracao = LocalDateTime.now().plusMinutes(10); // Define 10 minutos de validade
 
             usuarioService.gerarESalvarToken(emailUsuario);
             String token = usuario.getToken();

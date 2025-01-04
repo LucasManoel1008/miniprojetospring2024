@@ -51,23 +51,6 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("E-mail não encontrado.");
         }
     }
-
-    // Realizar a validação do Token
-    @PostMapping("/validar-token")
-    public ResponseEntity<Map<String, Object>> validarToken(@RequestParam String token) {
-        Map<String, Object> response = new HashMap<>();
-        boolean tokenValido = emailServiceImpl.validarToken(token);
-
-        if (tokenValido) {
-            response.put("tokenValido", true);
-        } else {
-            response.put("tokenValido", false);
-        }
-
-        return ResponseEntity.ok(response);
-    }
-
-
     @PostMapping("/redefinir-senha")
     public ResponseEntity<?> redefinirSenha(@RequestParam String token, @RequestParam String novaSenha){
         Optional<Usuario> usuarioOpt = usuarioService.findByToken(token);
@@ -76,7 +59,7 @@ public class UsuarioController {
             Usuario usuario = usuarioOpt.get();
             LocalDateTime now = LocalDateTime.now();
 
-            if (now.isBefore(usuario.getExpiracao_token())){
+            if (now.isBefore(usuario.getExpiracao_token())){ // Checa se o token não expirou
                 usuario.setSenha_usuario(novaSenha); // Atualiza a senha
                 usuario.setSenhaToken(null);
                 usuario.setToken(null);

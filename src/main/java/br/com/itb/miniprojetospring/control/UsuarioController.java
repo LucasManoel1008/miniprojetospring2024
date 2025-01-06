@@ -91,6 +91,7 @@ public class UsuarioController {
     }
     @PostMapping
     public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario) {
+        System.out.println(System.currentTimeMillis());
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.save(usuario));
     }
     @GetMapping("/email/{email}")

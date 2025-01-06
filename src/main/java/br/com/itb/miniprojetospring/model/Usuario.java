@@ -91,11 +91,6 @@ public class Usuario {
 	public LocalDateTime getData_criacao_usuario() {
 		return data_criacao_usuario;
 	}
-
-	public String getSenhaToken() {
-		return senhaToken;
-	}
-
 	public void setSenhaToken(String senhaToken) {
 		this.senhaToken = senhaToken;
 	}

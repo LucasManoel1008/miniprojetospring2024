@@ -25,7 +25,6 @@ public class Servico {
     private String categoria_servico;
     private String local_servico;
     private Date disponibilidade_servico;
-    private byte[] imagem_servico;
     private String valor_estimado_servico;
     private String criterios_servico;
     // Chave Estrangeira - Empresa
@@ -71,17 +70,6 @@ public class Servico {
     public void setDisponibilidade_servico(Date disponibilidade_servico) {
         this.disponibilidade_servico = disponibilidade_servico;
     }
-
-
-
-    public byte[] getImagem_servico() {
-        return imagem_servico;
-    }
-
-    public void setImagem_servico(byte[] imagem_servico) {
-        this.imagem_servico = imagem_servico;
-    }
-
     public String getValor_estimado_servico() {
         return valor_estimado_servico;
     }

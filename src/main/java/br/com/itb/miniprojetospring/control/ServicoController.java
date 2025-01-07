@@ -9,8 +9,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.Temporal;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600, allowCredentials = "false")
@@ -62,6 +69,82 @@ public class ServicoController {
     public ResponseEntity<List<Servico>> getAllServicos() {
         return ResponseEntity.ok(servicoService.findAll());
     }
+    @GetMapping("/listar-servicos")
+    public ResponseEntity<List<Servico>> listarServicosPorDisponibilidade() {
+        LocalDateTime dataAtual = LocalDateTime.now();
+
+        List<Servico> listarServicos = servicoService.findAll().stream()
+                .filter(Servico::getStatus_servico) // Filtra serviços com status ativo
+                .map(servico -> {
+
+                        if (servico.getDisponibilidade_servico() != null) {
+                        // Converte Date para LocalDateTime
+                        LocalDateTime dataDisponibilidade = servico.getDisponibilidade_servico()
+                                .toInstant()
+                                .atZone(ZoneId.systemDefault())
+                                .toLocalDateTime();
+
+                        // Calcula a duração entre a data de disponibilidade e a data atual
+                        Long tempoPassado = Duration.between(dataDisponibilidade, dataAtual).toSeconds();
+                        if (tempoPassado < 0){
+                            servico.setTempo_servico("Estará disponível em: " + dataDisponibilidade.format(DateTimeFormatter.ofPattern("DD/MM/YYYY")));
+                            return servico;
+                        }
+                        else if (tempoPassado > 60 * 60 * 24 * 30) {
+                            tempoPassado = Duration.between(dataDisponibilidade, dataAtual).toDays() / 30;
+                            if (tempoPassado > 1) {
+                                servico.setTempo_servico("Há " + tempoPassado + " meses");
+                                return servico;
+                            } else {
+                                servico.setTempo_servico("Há " + tempoPassado + " mês");
+                                return servico;
+                            }
+                        } else if (tempoPassado > 60 * 60 * 24) {
+                            tempoPassado = Duration.between(dataDisponibilidade, dataAtual).toDays();
+                            if (tempoPassado > 1) {
+                                servico.setTempo_servico("Há " + tempoPassado + " dias");
+                                return servico;
+                            } else {
+                                servico.setTempo_servico("Há " + tempoPassado + " dia");
+                                return servico;
+                            }
+                        } else if (tempoPassado > 60 * 60) {
+                            tempoPassado = Duration.between(dataDisponibilidade, dataAtual).toHours();
+                            if (tempoPassado > 1) {
+                                servico.setTempo_servico("Há " + tempoPassado + " horas");
+                                return servico;
+                            } else {
+                                servico.setTempo_servico("Há " + tempoPassado + " hora");
+                                return servico;
+                            }
+                        } else if (tempoPassado > 60) {
+                            tempoPassado = Duration.between(dataDisponibilidade, dataAtual).toMinutes();
+                            if (tempoPassado > 1) {
+                                servico.setTempo_servico("Há " + tempoPassado + " minutos");
+                                return servico;
+                            } else {
+                                servico.setTempo_servico("Há " + tempoPassado + " minuto");
+                                return servico;
+                            }
+                        } else {
+                            if (tempoPassado < 10) {
+                                servico.setTempo_servico("Agora mesmo");
+                                return servico;
+                            } else {
+                                servico.setTempo_servico("Há " + tempoPassado + " segundos");
+                                return servico;
+                            }
+                        }
+                    }
+                    return servico;
+                })
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(listarServicos);
+    }
+
+
+
     @GetMapping("/empresa/{cnpj}")
     public ResponseEntity<List<Servico>> getServicosByEmpresa(@PathVariable String cnpj) {
         Optional<Empresa> empresaOptional = empresaService.findAllById(cnpj);

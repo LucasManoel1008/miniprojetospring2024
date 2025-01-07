@@ -27,6 +27,7 @@ public class Servico {
     private Date disponibilidade_servico;
     private String valor_estimado_servico;
     private String criterios_servico;
+    private String tempo_servico;
     // Chave Estrangeira - Empresa
     @ManyToOne
     @JoinColumn(name = "cnpj_empresa", referencedColumnName = "cnpj")
@@ -35,6 +36,7 @@ public class Servico {
     private Boolean status_servico;
 
 //    Getter's e Setter's
+
     public String getCriterios_servico() {
         return criterios_servico;
     }
@@ -108,5 +110,13 @@ public class Servico {
 
     public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
+    }
+
+    public String getTempo_servico() {
+        return tempo_servico;
+    }
+
+    public void setTempo_servico(String tempo_servico) {
+        this.tempo_servico = tempo_servico;
     }
 }

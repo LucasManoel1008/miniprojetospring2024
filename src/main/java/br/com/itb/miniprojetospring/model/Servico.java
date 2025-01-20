@@ -119,4 +119,13 @@ public class Servico {
     public void setTempo_servico(String tempo_servico) {
         this.tempo_servico = tempo_servico;
     }
+
+    @Override
+    public String toString() {
+        return "Servico{" +
+                "id=" + id +
+                ", disponibilidade_servico=" + disponibilidade_servico +
+                ", tempo_servico='" + tempo_servico + '\'' +
+                '}';
+    }
 }

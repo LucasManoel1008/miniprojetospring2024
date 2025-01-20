@@ -14,9 +14,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.Temporal;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -69,79 +67,66 @@ public class ServicoController {
     public ResponseEntity<List<Servico>> getAllServicos() {
         return ResponseEntity.ok(servicoService.findAll());
     }
+
+    // Filtra serviços por status == true e retorna quando foram públicados
     @GetMapping("/listar-servicos")
     public ResponseEntity<List<Servico>> listarServicosPorDisponibilidade() {
         LocalDateTime dataAtual = LocalDateTime.now();
 
         List<Servico> listarServicos = servicoService.findAll().stream()
-                .filter(Servico::getStatus_servico) // Filtra serviços com status ativo
                 .map(servico -> {
-
-                        if (servico.getDisponibilidade_servico() != null) {
-                        // Converte Date para LocalDateTime
-                        LocalDateTime dataDisponibilidade = servico.getDisponibilidade_servico()
-                                .toInstant()
-                                .atZone(ZoneId.systemDefault())
-                                .toLocalDateTime();
-
-                        // Calcula a duração entre a data de disponibilidade e a data atual
-                        Long tempoPassado = Duration.between(dataDisponibilidade, dataAtual).toSeconds();
-                        if (tempoPassado < 0){
-                            servico.setTempo_servico("Estará disponível em: " + dataDisponibilidade.format(DateTimeFormatter.ofPattern("DD/MM/YYYY")));
-                            return servico;
-                        }
-                        else if (tempoPassado > 60 * 60 * 24 * 30) {
-                            tempoPassado = Duration.between(dataDisponibilidade, dataAtual).toDays() / 30;
-                            if (tempoPassado > 1) {
-                                servico.setTempo_servico("Há " + tempoPassado + " meses");
-                                return servico;
-                            } else {
-                                servico.setTempo_servico("Há " + tempoPassado + " mês");
-                                return servico;
-                            }
-                        } else if (tempoPassado > 60 * 60 * 24) {
-                            tempoPassado = Duration.between(dataDisponibilidade, dataAtual).toDays();
-                            if (tempoPassado > 1) {
-                                servico.setTempo_servico("Há " + tempoPassado + " dias");
-                                return servico;
-                            } else {
-                                servico.setTempo_servico("Há " + tempoPassado + " dia");
-                                return servico;
-                            }
-                        } else if (tempoPassado > 60 * 60) {
-                            tempoPassado = Duration.between(dataDisponibilidade, dataAtual).toHours();
-                            if (tempoPassado > 1) {
-                                servico.setTempo_servico("Há " + tempoPassado + " horas");
-                                return servico;
-                            } else {
-                                servico.setTempo_servico("Há " + tempoPassado + " hora");
-                                return servico;
-                            }
-                        } else if (tempoPassado > 60) {
-                            tempoPassado = Duration.between(dataDisponibilidade, dataAtual).toMinutes();
-                            if (tempoPassado > 1) {
-                                servico.setTempo_servico("Há " + tempoPassado + " minutos");
-                                return servico;
-                            } else {
-                                servico.setTempo_servico("Há " + tempoPassado + " minuto");
-                                return servico;
-                            }
-                        } else {
-                            if (tempoPassado < 10) {
-                                servico.setTempo_servico("Agora mesmo");
-                                return servico;
-                            } else {
-                                servico.setTempo_servico("Há " + tempoPassado + " segundos");
-                                return servico;
-                            }
-                        }
-                    }
+                        LocalDateTime dataDisponibilidade = servico.getDisponibilidade_servico().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+                        servico.setTempo_servico(servicoService.calcularTempoPassado(dataDisponibilidade, dataAtual));
                     return servico;
                 })
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(listarServicos);
     }
+
+    // Filtra serviços pelo filtro na tela "Servicos"
+    @GetMapping("/filtrar")
+    public ResponseEntity<List<Servico>> filtrarServicos(@RequestParam String categoria, @RequestParam Double valor, @RequestParam String data) {
+        List<Servico> filtrarServico = servicoService.findAll().stream()
+                .filter(servico -> categoria.equals("todas") || servico.getCategoria_servico().equalsIgnoreCase(categoria))
+                .filter(servico -> valor == 0 || Double.parseDouble(servico.getValor_estimado_servico()) < valor)
+                .map(this::setTempoServico)
+                .collect(Collectors.toList());
+       List<Servico> servicosFormatados = new ArrayList<>(servicoService.ordenarServico(filtrarServico, data));
+        System.out.println("serviços organizada: " + Arrays.toString(servicosFormatados.toArray()));
+
+        return ResponseEntity.ok(servicosFormatados);
+    }
+
+    private Servico setTempoServico(Servico servico) {
+        LocalDateTime dataAtual = LocalDateTime.now();
+        LocalDateTime dataDisponibilidade = servico.getDisponibilidade_servico().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        servico.setTempo_servico(servicoService.calcularTempoPassado(dataDisponibilidade, dataAtual));
+        return servico;
+    }
+
+    @GetMapping("/pesquisar-servico")
+    public ResponseEntity<List<Servico>> pesquisarServico(@RequestParam String nome) {
+        if (nome.equals("") || nome == null) {
+            return ResponseEntity.ok(listarServicosPorDisponibilidade().getBody());
+        }
+        List<Servico> servicos = servicoService.findAll().stream()
+                .filter(servico -> servico.getNome_servico().toLowerCase().contains(nome.toLowerCase()))
+                .map(servico -> {
+                    LocalDateTime dataAtual = LocalDateTime.now();
+                    if (servico.getDisponibilidade_servico() != null) {
+                        LocalDateTime dataDisponibilidade = servico.getDisponibilidade_servico()
+                                .toInstant()
+                                .atZone(ZoneId.systemDefault())
+                                .toLocalDateTime();
+                        servico.setTempo_servico(servicoService.calcularTempoPassado(dataDisponibilidade, dataAtual));
+                    }
+                    return servico;
+                })
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(servicos);
+    }
+
 
 
 

@@ -18,14 +18,6 @@ public class TokenService {
         tokenStorage.put(token, LocalDateTime.now());
     }
 
-    // Validação do token
-    public boolean tokenValido(String token){
-        LocalDateTime tempoExpiracao = tokenStorage.get(token);
-        if (tempoExpiracao == null){
-            return false;
-        }
-        return LocalDateTime.now().isBefore(tempoExpiracao.plusMinutes(10)); // Validade de 10 minutos
-    }
     @Scheduled(fixedRate = 60000)
     public void limparToken(){
         Iterator<Map.Entry<String, LocalDateTime>> interator = tokenStorage.entrySet().iterator();

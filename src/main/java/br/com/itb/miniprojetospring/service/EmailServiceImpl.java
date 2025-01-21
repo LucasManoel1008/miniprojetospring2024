@@ -20,11 +20,6 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private UsuarioRepository usuarioRepository;
     @Override
-    public String enviarEmailRecuperacao(String email_usuario) {
-        return "";
-    }
-
-    @Override
     public String enviarEmailRecuperacao(String email_usuario, String token) {
         try {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -34,7 +29,7 @@ public class EmailServiceImpl implements EmailService {
             messageHelper.setTo(email_usuario);
             messageHelper.setText("<p>Olá "+ email_usuario+"!</p>"+
                     "<p>Recebemos sua solicitação para um código de uso-único para <strong> redefinição de senha </strong>.</p>"+
-                    
+
                     "<p>Seu código para a Restauração da senha: <strong>" + token + "</strong></p>." +
                     "<p>Caso não temha solicitado esse código, apenas ignore esta mensagem </p>"+
                     "</br>" +
@@ -49,19 +44,5 @@ public class EmailServiceImpl implements EmailService {
         }
     }
 
-    @Override
-    public boolean validarToken(String token) {
-        Optional<Usuario> optionalUsuario = usuarioRepository.findByToken(token);
-
-        if (optionalUsuario.isPresent() && optionalUsuario.get().isTokenValido()) {
-            return true; // Token válido
-        } else {
-            return false; // Token inválido ou expirado
-        }
-    }
-
-    private String generateToken() {
-        return UUID.randomUUID().toString().substring(0, 9); // Gera um token de 9 caracteres
-    }
 }
 

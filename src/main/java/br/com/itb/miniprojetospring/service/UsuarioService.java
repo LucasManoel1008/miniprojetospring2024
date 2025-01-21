@@ -5,24 +5,23 @@ import br.com.itb.miniprojetospring.model.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import br.com.itb.miniprojetospring.constants.TokenConstants;
 import java.security.SecureRandom;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class UsuarioService {
     @Autowired
     final UsuarioRepository usuarioRepository;
+
     @Autowired
     private EmailService emailService;
 
     @Autowired
     private TokenService tokenService;
 
-    private static final int TOKEN_LENGTH = 9;
+    TokenConstants tokenConstants;
 
     public UsuarioService(UsuarioRepository _usuarioRepository){
         this.usuarioRepository = _usuarioRepository;
@@ -41,30 +40,24 @@ public class UsuarioService {
         return usuarioRepository.findByEmail(email_usuario).orElse(null);
     }
 
-    // Esse é diferente do de cima, funciona apenas no token
+    // BLOCK - Métodos para redefinir senha
     public Optional<Usuario> buscarPorEmail(String emailUsuario) {
         return usuarioRepository.findByEmail(emailUsuario);
     }
 
-    public void gerarESalvarToken(String emailUsuario) {
-        Usuario usuario = usuarioRepository.findByEmail(emailUsuario)
-                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado"));
-
-        String token = gerarToken();
-        usuario.setToken(token);
-
+    public void gerarESalvarToken(Usuario usuario) {
+        usuario.setToken(gerarToken());
         usuarioRepository.save(usuario);
     }
 
     private String gerarToken() {
-        SecureRandom random = new SecureRandom();
-        StringBuilder token = new StringBuilder();
-        String caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        for (int i = 0; i < TOKEN_LENGTH; i++) {
-            token.append(caracteres.charAt(random.nextInt(caracteres.length())));
+        SecureRandom secureNumberGenerator = new SecureRandom();
+        StringBuilder tokenStringBuilder = new StringBuilder();
+        for (int i = 0; i < TokenConstants.TOKEN_LENGTH; i++) {
+            tokenStringBuilder.append(TokenConstants.TOKEN_CARACTERES.charAt(secureNumberGenerator.nextInt(TokenConstants.TOKEN_CARACTERES.length())));
         }
-        tokenService.adicionarToken(String.valueOf(token));
-        return token.toString();
+        tokenService.adicionarToken(String.valueOf(tokenStringBuilder));
+        return tokenStringBuilder.toString();
     }
     public List<Usuario> findAll(){
         return  usuarioRepository.findAll();
@@ -72,15 +65,6 @@ public class UsuarioService {
 
     public Optional<Usuario> findById(String cpf){
         return usuarioRepository.findById(cpf);
-    }
-
-    public void atualizarToken(String emailUsuario, String token, LocalDateTime expiracaoToken) {
-        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(emailUsuario);
-        usuarioOpt.ifPresent(usuario -> {
-            usuario.setToken(token);
-            usuario.setExpiracao_token(expiracaoToken);
-            usuarioRepository.save(usuario);
-        });
     }
 
     public Optional<Usuario> findByToken(String token){

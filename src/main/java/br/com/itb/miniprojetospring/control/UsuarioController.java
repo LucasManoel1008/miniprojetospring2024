@@ -5,6 +5,8 @@ import br.com.itb.miniprojetospring.model.UsuarioRepository;
 import br.com.itb.miniprojetospring.service.EmailService;
 import br.com.itb.miniprojetospring.service.EmailServiceImpl;
 import br.com.itb.miniprojetospring.service.UsuarioService;
+import br.com.itb.miniprojetospring.constants.MessageConstants;
+import com.fasterxml.jackson.core.util.RequestPayload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,39 +19,30 @@ import java.util.*;
 @CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/usuario")
 public class UsuarioController {
+
+    private MessageConstants messageConstants;
     @Autowired
-    final UsuarioService usuarioService;
+    private UsuarioService usuarioService;
     @Autowired
     private EmailServiceImpl emailServiceImpl;
     @Autowired
-    UsuarioRepository usuarioRepository;
-
+    private UsuarioRepository usuarioRepository;
     @Autowired
     private EmailService emailService;
 
     public UsuarioController(UsuarioService _usuarioService) {
         this.usuarioService = _usuarioService;
     }
-    // testa o email do usuario
 
-    @PostMapping("/recuperar-senha")
-    public ResponseEntity<String> recuperarSenha(@RequestBody Map<String, String> payload) {
-        String emailUsuario = payload.get("email_usuario");
-        Optional<Usuario> usuarioOpt = usuarioService.buscarPorEmail(emailUsuario);
-
-        if (usuarioOpt.isPresent()) {
-            Usuario usuario = usuarioOpt.get();
-
-            LocalDateTime expiracao = LocalDateTime.now().plusMinutes(10); // Define 10 minutos de validade
-
-            usuarioService.gerarESalvarToken(emailUsuario);
-            String token = usuario.getToken();
-            emailService.enviarEmailRecuperacao(emailUsuario, token);
-
-            return ResponseEntity.ok("E-mail de recuperação enviado com sucesso!");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("E-mail não encontrado.");
-        }
+    // removi o emailService.enviarEmaildeRecuperacao
+    @GetMapping("/validar-email-usuario")
+    public ResponseEntity<String> validarEmailUsuario(@RequestParam String email) {
+        return usuarioService.buscarPorEmail(email)
+                .map(usuario -> {
+                  usuarioService.gerarESalvarToken(usuario);
+                  return ResponseEntity.ok(emailService.enviarEmailRecuperacao(email, usuario.getToken()));
+                })
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageConstants.EMAIL_NOT_FOUND));
     }
     @PostMapping("/redefinir-senha")
     public ResponseEntity<?> redefinirSenha(@RequestParam String token, @RequestParam String novaSenha){

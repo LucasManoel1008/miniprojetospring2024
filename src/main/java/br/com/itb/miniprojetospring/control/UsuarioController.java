@@ -79,6 +79,15 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+    @GetMapping("check-email/{email}")
+    public ResponseEntity<Integer> checkEmail(@PathVariable String email) {
+        Usuario usuario = usuarioService.findByEmailUsuario(email);
+        if (usuario != null) {
+            return ResponseEntity.ok(1);
+        } else {
+            return ResponseEntity.ok(0);
+        }
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Usuario> getUsuario(@PathVariable String cpf) {

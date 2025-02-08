@@ -9,9 +9,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-import java.util.UUID;
-
 @Service
 public class EmailServiceImpl implements EmailService {
 
@@ -38,7 +35,7 @@ public class EmailServiceImpl implements EmailService {
 
 
             javaMailSender.send(mimeMessage);
-            return token; // Retorna o token gerado
+            return token;
         } catch (MessagingException e) {
             throw new RuntimeException("Erro ao enviar o e-mail de recuperacao de senha", e);
         }

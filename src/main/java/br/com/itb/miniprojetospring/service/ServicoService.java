@@ -1,16 +1,21 @@
 package br.com.itb.miniprojetospring.service;
 
-import br.com.itb.miniprojetospring.model.Empresa;
-import br.com.itb.miniprojetospring.model.Servico;
-import br.com.itb.miniprojetospring.model.ServicoRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import br.com.itb.miniprojetospring.model.Empresa;
+import br.com.itb.miniprojetospring.model.Servico;
+import br.com.itb.miniprojetospring.model.ServicoRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class ServicoService {
@@ -24,8 +29,6 @@ public class ServicoService {
 
     @Transactional
     public Servico save(Servico _servico) {
-        // Log para verificar os dados do serviço que está sendo salvo
-        System.out.println("Salvando serviço: " + _servico);
         return servicoRepository.save(_servico);
     }
     public List<Servico> findByEmpresa(Empresa empresa) {

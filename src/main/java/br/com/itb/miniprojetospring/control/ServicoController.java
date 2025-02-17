@@ -1,21 +1,32 @@
 package br.com.itb.miniprojetospring.control;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import br.com.itb.miniprojetospring.model.Empresa;
 import br.com.itb.miniprojetospring.model.Servico;
 import br.com.itb.miniprojetospring.service.EmpresaService;
 import br.com.itb.miniprojetospring.service.ServicoService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.Temporal;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600, allowCredentials = "false")
@@ -39,14 +50,8 @@ public class ServicoController {
         if (empresaOptional.isPresent()) {
             Empresa empresa = empresaOptional.get();
             servico.setEmpresa(empresa);
-
-            // Log para verificar a empresa associada
-            System.out.println("Empresa associada ao serviço: " + empresa);
-
             Servico servicoSalvo = servicoService.save(servico);
-
-            // Log para verificar o serviço salvo
-            System.out.println("Serviço salvo: " + servicoSalvo);
+            System.out.println("Serviço salvo com sucesso!");
             return ResponseEntity.ok(servicoSalvo);
         } else {
             return ResponseEntity.badRequest().build();
@@ -75,7 +80,7 @@ public class ServicoController {
 
         List<Servico> listarServicos = servicoService.findAll().stream()
                 .map(servico -> {
-                        LocalDateTime dataDisponibilidade = servico.getDisponibilidade_servico().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+                        LocalDateTime dataDisponibilidade = servico.getDisponibilidade_servico().toInstant().atZone(ZoneId.of("America/Sao_Paulo")).toLocalDateTime();
                         servico.setTempo_servico(servicoService.calcularTempoPassado(dataDisponibilidade, dataAtual));
                     return servico;
                 })
@@ -94,12 +99,13 @@ public class ServicoController {
                 .collect(Collectors.toList());
        List<Servico> servicosFormatados = new ArrayList<>(servicoService.ordenarServico(filtrarServico, data));
         System.out.println("serviços organizada: " + Arrays.toString(servicosFormatados.toArray()));
-
         return ResponseEntity.ok(servicosFormatados);
     }
 
     private Servico setTempoServico(Servico servico) {
-        LocalDateTime dataAtual = LocalDateTime.now();
+        Instant data = Instant.now();
+        ZoneId zoneId = ZoneId.of("America/Sao_Paulo");
+        LocalDateTime dataAtual = LocalDateTime.ofInstant(data, zoneId);
         LocalDateTime dataDisponibilidade = servico.getDisponibilidade_servico().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
         servico.setTempo_servico(servicoService.calcularTempoPassado(dataDisponibilidade, dataAtual));
         return servico;

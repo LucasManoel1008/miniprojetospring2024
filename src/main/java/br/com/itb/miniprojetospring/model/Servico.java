@@ -2,13 +2,16 @@ package br.com.itb.miniprojetospring.model;
 
 import jakarta.persistence.*;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
 @Table(name = "Servico")
 public class Servico {
-    Servico(){
 
+
+
+    Servico(){
     }
     public Servico(long id, String nome_servico, String descricao_servico){
         this.nome_servico = nome_servico;

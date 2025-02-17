@@ -2,21 +2,25 @@ package br.com.itb.miniprojetospring.model;
 
 import jakarta.persistence.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 @Entity
 @Table(name="Usuario")
 public class Usuario {
-
+    public static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 
 	public Usuario(String cpf, String nome_usuario){
-		this.cpf =cpf;
+		this.cpf = cpf;
 		this.nome_usuario = nome_usuario;
 	}
 	public Usuario() {
-		this.data_criacao_usuario = LocalDateTime.now(); // Define a data de criação automaticamente
+		this.data_criacao_usuario = Instant.now().atZone(ZoneId.of("America/Sao_Paulo")).toLocalDateTime();
 	}
 	
 	@Id
@@ -60,8 +64,8 @@ public class Usuario {
 		return data_nascimento;
 	}
 
-	public void setData_nascimento(Date data_nascimento) {
-		this.data_nascimento = data_nascimento;
+	public void setData_nascimento(Date data_nascimento) throws ParseException {
+		this.data_nascimento = sdf.parse(sdf.format(data_nascimento));
 	}
 
 	public String getSenha_usuario() {

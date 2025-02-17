@@ -1,7 +1,5 @@
 package br.com.itb.miniprojetospring.service;
 
-import br.com.itb.miniprojetospring.model.Usuario;
-import br.com.itb.miniprojetospring.model.UsuarioRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +12,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Autowired
     private JavaMailSender javaMailSender;
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+
     @Override
     public String enviarEmailRecuperacao(String email_usuario, String token) {
         try {
@@ -26,18 +23,15 @@ public class EmailServiceImpl implements EmailService {
             messageHelper.setTo(email_usuario);
             messageHelper.setText("<p>Olá "+ email_usuario+"!</p>"+
                     "<p>Recebemos sua solicitação para um código de uso-único para <strong> redefinição de senha </strong>.</p>"+
-
                     "<p>Seu código para a Restauração da senha: <strong>" + token + "</strong></p>." +
-                    "<p>Caso não temha solicitado esse código, apenas ignore esta mensagem </p>"+
+                    "<p>Caso não tenha solicitado esse código, apenas ignore esta mensagem </p>"+
                     "</br>" +
                     "<p>Agradecemos pela sua atenção,</p>"+
                     "<p>Safe Solutions</p>",true);
-
-
             javaMailSender.send(mimeMessage);
             return token;
         } catch (MessagingException e) {
-            throw new RuntimeException("Erro ao enviar o e-mail de recuperacao de senha", e);
+            throw new RuntimeException("Erro ao enviar o e-mail de recuperacao de senha: ", e);
         }
     }
 

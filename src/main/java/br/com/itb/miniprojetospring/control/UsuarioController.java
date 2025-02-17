@@ -24,10 +24,6 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
     @Autowired
-    private EmailServiceImpl emailServiceImpl;
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-    @Autowired
     private EmailService emailService;
 
     public UsuarioController(UsuarioService _usuarioService) {
@@ -67,7 +63,6 @@ public class UsuarioController {
     }
     @PostMapping
     public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario) {
-        System.out.println(System.currentTimeMillis());
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.save(usuario));
     }
     @GetMapping("/email/{email}")
@@ -79,6 +74,15 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
+    @GetMapping("/{cpf}")
+    public ResponseEntity<Integer> checkCpf(@PathVariable String cpf){
+        Usuario usuario = usuarioService.findByCpf(cpf).orElse(null);
+        if(usuario != null){
+            return ResponseEntity.ok(1);
+        } else {
+            return ResponseEntity.ok(0);
+        }
+    }
     @GetMapping("check-email/{email}")
     public ResponseEntity<Integer> checkEmail(@PathVariable String email) {
         Usuario usuario = usuarioService.findByEmailUsuario(email);
@@ -86,16 +90,6 @@ public class UsuarioController {
             return ResponseEntity.ok(1);
         } else {
             return ResponseEntity.ok(0);
-        }
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Usuario> getUsuario(@PathVariable String cpf) {
-        Optional<Usuario> usuarioOptional = usuarioService.findById(cpf);
-        if (usuarioOptional.isPresent()) {
-            return ResponseEntity.ok(usuarioOptional.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
@@ -114,9 +108,9 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuário não encontrado");
         }
     }
+
     @PutMapping("/{email_usuario}/senha")
     public ResponseEntity<Object> atualizarSenha(@PathVariable String email_usuario, @RequestBody Map<String, String> requestBody) {
-        // Extrair a nova senha do corpo da requisição
         String novaSenha = requestBody.get("novaSenha");
 
         if (novaSenha == null || novaSenha.isEmpty()) {
@@ -131,6 +125,7 @@ public class UsuarioController {
 
         // Atualizar a senha e salvar no banco de dados
         usuario.setSenha_usuario(novaSenha);
+        usuario.setToken(null);
         usuarioService.update(usuario); // Método deve salvar a alteração no banco
 
         return ResponseEntity.ok("Senha atualizada com sucesso.");

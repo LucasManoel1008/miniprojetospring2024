@@ -36,7 +36,8 @@ public class UsuarioController {
         return usuarioService.buscarPorEmail(email)
                 .map(usuario -> {
                   usuarioService.gerarESalvarToken(usuario);
-                  return ResponseEntity.ok(emailService.enviarEmailRecuperacao(email, usuario.getToken()));
+
+                  return ResponseEntity.ok(emailService.enviarEmailRecuperacao(email, usuario.getnome_usuario(), usuario.getToken()));
                 })
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageConstants.EMAIL_NOT_FOUND));
     }

@@ -1,19 +1,28 @@
 package br.com.itb.miniprojetospring.control;
 
-import br.com.itb.miniprojetospring.model.Usuario;
-import br.com.itb.miniprojetospring.model.UsuarioRepository;
-import br.com.itb.miniprojetospring.service.EmailService;
-import br.com.itb.miniprojetospring.service.EmailServiceImpl;
-import br.com.itb.miniprojetospring.service.UsuarioService;
-import br.com.itb.miniprojetospring.constants.MessageConstants;
-import com.fasterxml.jackson.core.util.RequestPayload;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
-import java.util.*;
+import br.com.itb.miniprojetospring.constants.MessageConstants;
+import br.com.itb.miniprojetospring.model.Usuario;
+import br.com.itb.miniprojetospring.service.EmailService;
+import br.com.itb.miniprojetospring.service.UsuarioService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:5173")
@@ -48,8 +57,6 @@ public class UsuarioController {
         if (usuarioOpt.isPresent()){
             Usuario usuario = usuarioOpt.get();
             LocalDateTime now = LocalDateTime.now();
-
-            if (now.isBefore(usuario.getExpiracao_token())){ // Checa se o token não expirou
                 usuario.setSenha_usuario(novaSenha); // Atualiza a senha
                 usuario.setSenhaToken(null);
                 usuario.setToken(null);
@@ -58,9 +65,7 @@ public class UsuarioController {
             } else {
                 return ResponseEntity.badRequest().body("Token expirado.");
             }
-        } else {
-            return ResponseEntity.badRequest().body("Token inválido");
-        }
+        
     }
     @PostMapping
     public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario) {

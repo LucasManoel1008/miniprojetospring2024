@@ -1,13 +1,16 @@
 package br.com.itb.miniprojetospring.model;
 
-import jakarta.persistence.*;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name="Usuario")
@@ -42,8 +45,7 @@ public class Usuario {
 	private LocalDateTime data_criacao_usuario;
 	@Column(name = "senha_token", nullable = true, updatable = false)
 	private String senhaToken;
-	@Column(name = "expiracao_token", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", updatable = false)
-	private LocalDateTime expiracao_token;
+
 	@Column(name = "token")
 	private String token;
 	
@@ -111,14 +113,4 @@ public class Usuario {
 		this.data_criacao_usuario = data_criacao_usuario;
 	}
 
-	public LocalDateTime getExpiracao_token() {
-		return expiracao_token;
-	}
-
-	public void setExpiracao_token(LocalDateTime expiracao_token) {
-		this.expiracao_token = expiracao_token;
-	}
-	public boolean isTokenValido() {
-		return expiracao_token != null && LocalDateTime.now().isBefore(expiracao_token);
-	}
 }

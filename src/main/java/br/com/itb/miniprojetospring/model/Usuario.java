@@ -111,13 +111,7 @@ public class Usuario {
 		this.data_criacao_usuario = data_criacao_usuario;
 	}
 
-	public LocalDateTime getExpiracao_token() {
-		return expiracao_token;
-	}
 
-	public void setExpiracao_token(LocalDateTime expiracao_token) {
-		this.expiracao_token = expiracao_token;
-	}
 	public boolean isTokenValido() {
 		return expiracao_token != null && LocalDateTime.now().isBefore(expiracao_token);
 	}

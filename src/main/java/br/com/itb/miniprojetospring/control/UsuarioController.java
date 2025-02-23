@@ -36,7 +36,6 @@ public class UsuarioController {
         return usuarioService.buscarPorEmail(email)
                 .map(usuario -> {
                   usuarioService.gerarESalvarToken(usuario);
-
                   return ResponseEntity.ok(emailService.enviarEmailRecuperacao(email, usuario.getnome_usuario(), usuario.getToken()));
                 })
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageConstants.EMAIL_NOT_FOUND));
@@ -48,20 +47,15 @@ public class UsuarioController {
         if (usuarioOpt.isPresent()){
             Usuario usuario = usuarioOpt.get();
             LocalDateTime now = LocalDateTime.now();
-
-            if (now.isBefore(usuario.getExpiracao_token())){ // Checa se o token não expirou
-                usuario.setSenha_usuario(novaSenha); // Atualiza a senha
-                usuario.setSenhaToken(null);
-                usuario.setToken(null);
-                usuarioService.save(usuario);
-                return ResponseEntity.ok("Senha redefinida com sucesso.");
+            usuario.setSenha_usuario(novaSenha); // Atualiza a senha
+            usuario.setSenhaToken(null);
+            usuario.setToken(null);
+            usuarioService.save(usuario);
+            return ResponseEntity.ok("Senha redefinida com sucesso.");
             } else {
                 return ResponseEntity.badRequest().body("Token expirado.");
             }
-        } else {
-            return ResponseEntity.badRequest().body("Token inválido");
         }
-    }
     @PostMapping
     public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario) {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.save(usuario));

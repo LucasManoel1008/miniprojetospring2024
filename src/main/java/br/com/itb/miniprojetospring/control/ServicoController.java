@@ -80,9 +80,12 @@ public class ServicoController {
 
         List<Servico> listarServicos = servicoService.findAll().stream()
                 .map(servico -> {
+                    if (servico.getDisponibilidade_servico() != null) {
                         LocalDateTime dataDisponibilidade = servico.getDisponibilidade_servico().toInstant().atZone(ZoneId.of("America/Sao_Paulo")).toLocalDateTime();
                         servico.setTempo_servico(servicoService.calcularTempoPassado(dataDisponibilidade, dataAtual));
+                    }
                     return servico;
+                    
                 })
                 .collect(Collectors.toList());
 

@@ -65,10 +65,12 @@ public class UsuarioController {
                 return ResponseEntity.badRequest().body("Token expirado.");
             }
         }
+        
     @PostMapping
     public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario) {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.save(usuario));
     }
+
     @GetMapping("/email/{email}")
     public ResponseEntity<Usuario> buscarPorEmail(@PathVariable String email) {
         Usuario usuario = usuarioService.findByEmailUsuario(email);

@@ -1,14 +1,17 @@
 package br.com.itb.miniprojetospring.service;
 
-import br.com.itb.miniprojetospring.model.Usuario;
-import br.com.itb.miniprojetospring.model.UsuarioRepository;
-import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import br.com.itb.miniprojetospring.constants.TokenConstants;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import br.com.itb.miniprojetospring.constants.TokenConstants;
+import br.com.itb.miniprojetospring.model.Usuario;
+import br.com.itb.miniprojetospring.model.UsuarioRepository;
+import jakarta.transaction.Transactional;
 
 @Service
 public class UsuarioService {
@@ -20,6 +23,9 @@ public class UsuarioService {
 
     @Autowired
     private TokenService tokenService;
+    
+    @Autowired
+    private CriptografiaSenha criptografiaSenha;
 
     TokenConstants tokenConstants;
 
@@ -28,7 +34,9 @@ public class UsuarioService {
     }
 
     @Transactional
-    public Usuario save(Usuario _usuario){
+    public Usuario save(Usuario _usuario) throws NoSuchAlgorithmException{
+    	String senhaCriptografada = criptografiaSenha.criptografarSenha(_usuario.getSenha_usuario());
+        _usuario.setSenha_usuario(senhaCriptografada);
         return usuarioRepository.save(_usuario);
     }
 

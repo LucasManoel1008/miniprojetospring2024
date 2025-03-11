@@ -1,5 +1,6 @@
 package br.com.itb.miniprojetospring.control;
 
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,7 @@ public class UsuarioController {
     @Autowired
     private EmailService emailService;
 
+
     public UsuarioController(UsuarioService _usuarioService) {
         this.usuarioService = _usuarioService;
     }
@@ -50,7 +52,7 @@ public class UsuarioController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageConstants.EMAIL_NOT_FOUND));
     }
     @PostMapping("/redefinir-senha")
-    public ResponseEntity<?> redefinirSenha(@RequestParam String token, @RequestParam String novaSenha){
+    public ResponseEntity<?> redefinirSenha(@RequestParam String token, @RequestParam String novaSenha) throws NoSuchAlgorithmException{
         Optional<Usuario> usuarioOpt = usuarioService.findByToken(token);
 
         if (usuarioOpt.isPresent()){
@@ -68,6 +70,7 @@ public class UsuarioController {
         
     @PostMapping
     public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario) {
+    	
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.save(usuario));
     }
 

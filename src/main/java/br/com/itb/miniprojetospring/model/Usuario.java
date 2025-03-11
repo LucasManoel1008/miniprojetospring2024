@@ -56,6 +56,9 @@ public class Usuario {
 		return nome_usuario;
 	}
 
+	public String getSenhaToken() {
+		return senhaToken;
+	}
 	public void setNome_usuario(String nome_usuario) {
 		this.nome_usuario = nome_usuario;
 	}

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CriptografiaSenha {
-	
+
 	public String criptografarSenha(String senha) throws NoSuchAlgorithmException{
 		
 		MessageDigest md = MessageDigest.getInstance("SHA-1");
@@ -23,5 +23,6 @@ public class CriptografiaSenha {
 		return sb.toString();
 				
 	}
+
 
 }

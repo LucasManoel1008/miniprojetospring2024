@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import br.com.itb.miniprojetospring.service.CriptografiaSenha;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,6 +36,8 @@ public class UsuarioController {
     private UsuarioService usuarioService;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private CriptografiaSenha criptografiaSenha;
 
 
     public UsuarioController(UsuarioService _usuarioService) {
@@ -58,7 +61,7 @@ public class UsuarioController {
         if (usuarioOpt.isPresent()){
             Usuario usuario = usuarioOpt.get();
             LocalDateTime now = LocalDateTime.now();
-            usuario.setSenha_usuario(novaSenha); // Atualiza a senha
+            usuario.setSenha_usuario(criptografiaSenha.criptografarSenha(novaSenha)); // Atualiza a senha
             usuario.setSenhaToken(null);
             usuario.setToken(null);
             usuarioService.save(usuario);
@@ -102,6 +105,8 @@ public class UsuarioController {
         }
     }
 
+
+
     @GetMapping
     public ResponseEntity<List<Usuario>> getAllUsuarios() {
         return ResponseEntity.ok(usuarioService.findAll());
@@ -119,7 +124,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/{email_usuario}/senha")
-    public ResponseEntity<Object> atualizarSenha(@PathVariable String email_usuario, @RequestBody Map<String, String> requestBody) {
+    public ResponseEntity<Object> atualizarSenha(@PathVariable String email_usuario, @RequestBody Map<String, String> requestBody) throws NoSuchAlgorithmException {
         String novaSenha = requestBody.get("novaSenha");
 
         if (novaSenha == null || novaSenha.isEmpty()) {
@@ -133,7 +138,7 @@ public class UsuarioController {
         }
 
         // Atualizar a senha e salvar no banco de dados
-        usuario.setSenha_usuario(novaSenha);
+        usuario.setSenha_usuario(criptografiaSenha.criptografarSenha(novaSenha));
         usuario.setToken(null);
         usuarioService.update(usuario); // Método deve salvar a alteração no banco
 

@@ -2,6 +2,7 @@ package br.com.itb.miniprojetospring.control;
 
 import br.com.itb.miniprojetospring.model.Empresa;
 import br.com.itb.miniprojetospring.model.Usuario;
+import br.com.itb.miniprojetospring.service.CriptografiaSenha;
 import br.com.itb.miniprojetospring.service.EmpresaService;
 import br.com.itb.miniprojetospring.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -22,6 +25,8 @@ public class EmpresaController {
 
     @Autowired
     private final UsuarioService usuarioService;
+    @Autowired
+    private CriptografiaSenha criptografiaSenha;
 
     public EmpresaController(EmpresaService empresaService, UsuarioService usuarioService) {
         this.empresaService = empresaService;
@@ -49,6 +54,22 @@ public class EmpresaController {
         return empresaOptional.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
+
+    @GetMapping("/login/{cnpj}")
+    public ResponseEntity<Empresa> realizarLogin(@PathVariable String cnpj, @RequestParam String senha) throws NoSuchAlgorithmException {
+        Optional<Empresa> empresaOptional = empresaService.findAllById(cnpj);
+        if(empresaOptional.isPresent()) {
+            String senhaCriptografada = criptografiaSenha.criptografarSenha(senha);
+            if(Objects.equals(empresaOptional.get().getUsuario().getSenha_usuario(), senhaCriptografada)){
+                return ResponseEntity.ok(empresaOptional.get());
+            }
+            else{
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            }
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
 
     // Método para obter todas as empresas
     @GetMapping

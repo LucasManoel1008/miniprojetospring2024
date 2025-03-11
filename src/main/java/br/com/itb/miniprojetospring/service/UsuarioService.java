@@ -91,7 +91,11 @@ public class UsuarioService {
         return usuarioRepository.findById(_usuario.getCpf())
                 .map(usuarioEncontrado -> {
                     usuarioEncontrado.setNome_usuario(_usuario.getnome_usuario());
-                    usuarioEncontrado.setSenha_usuario(_usuario.getSenha_usuario());
+                    try {
+                        usuarioEncontrado.setSenha_usuario(criptografiaSenha.criptografarSenha(_usuario.getSenha_usuario()));
+                    } catch (NoSuchAlgorithmException e) {
+                        throw new RuntimeException(e);
+                    }
                     usuarioEncontrado.setEmail(_usuario.getEmail());
                     usuarioEncontrado.setCpf(_usuario.getCpf());
                     return usuarioRepository.save(usuarioEncontrado);

@@ -69,7 +69,7 @@ public class UsuarioController {
         }
         
     @PostMapping
-    public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario) {
+    public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario) throws NoSuchAlgorithmException {
     	
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.save(usuario));
     }

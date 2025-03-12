@@ -96,13 +96,17 @@ public class UsuarioController {
         }
     }
     @GetMapping("check-email/{email}")
-    public ResponseEntity<Integer> checkEmail(@PathVariable String email) {
+    public ResponseEntity<Boolean> checkEmail(@PathVariable String email) {
+        boolean existingEmail = false;
         Usuario usuario = usuarioService.findByEmailUsuario(email);
+
         if (usuario != null) {
-            return ResponseEntity.ok(1);
+            existingEmail = true;
+
         } else {
-            return ResponseEntity.ok(0);
+            existingEmail = false;
         }
+        return ResponseEntity.ok(existingEmail);
     }
 
 

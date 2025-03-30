@@ -57,18 +57,12 @@ public class EmpresaController {
 
     @GetMapping("/login/{cnpj}")
     public ResponseEntity<Empresa> realizarLogin(@PathVariable String cnpj, @RequestParam String senha) throws NoSuchAlgorithmException {
-        System.out.println("CNPJ RECEBIDO:  " + cnpj    );
-        System.out.println("Senha recebida: " + senha);
         Optional<Empresa> empresaOptional = empresaService.findAllById(cnpj);
         if(empresaOptional.isPresent()) {
 
             String senhaCriptografada = criptografiaSenha.criptografarSenha(senha);
 
-            System.out.println("Senha usuario: " + senhaCriptografada);
-            System.out.println("Senha da empresa: " + empresaOptional.get().getUsuario().getSenha_usuario());
-
             if(empresaOptional.get().getUsuario().getSenha_usuario().equals(senhaCriptografada)) {
-                System.out.println("Chegou aqui");
                 return ResponseEntity.ok(empresaOptional.get());
             }
             else{

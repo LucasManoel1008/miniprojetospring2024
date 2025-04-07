@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import br.com.itb.miniprojetospring.model.Senhas_Antigas;
 import br.com.itb.miniprojetospring.service.CriptografiaSenha;
+import br.com.itb.miniprojetospring.service.Senhas_AntigasService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,10 +40,13 @@ public class UsuarioController {
     private EmailService emailService;
     @Autowired
     private CriptografiaSenha criptografiaSenha;
+    @Autowired
+    private final Senhas_AntigasService senhasAntigasService;
 
 
-    public UsuarioController(UsuarioService _usuarioService) {
+    public UsuarioController(UsuarioService _usuarioService, Senhas_AntigasService senhasAntigasService) {
         this.usuarioService = _usuarioService;
+        this.senhasAntigasService = senhasAntigasService;
     }
 
     // removi o emailService.enviarEmaildeRecuperacao
@@ -55,22 +60,35 @@ public class UsuarioController {
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body(messageConstants.EMAIL_NOT_FOUND));
     }
     @PostMapping("/redefinir-senha")
-    public ResponseEntity<?> redefinirSenha(@RequestParam String token, @RequestParam String novaSenha) throws NoSuchAlgorithmException{
+    public ResponseEntity<?> redefinirSenha(@RequestParam String token, @RequestParam String novaSenha) throws NoSuchAlgorithmException {
         Optional<Usuario> usuarioOpt = usuarioService.findByToken(token);
 
-        if (usuarioOpt.isPresent()){
-            Usuario usuario = usuarioOpt.get();
-            LocalDateTime now = LocalDateTime.now();
-            usuario.setSenha_usuario(criptografiaSenha.criptografarSenha(novaSenha)); // Atualiza a senha
-            usuario.setSenhaToken(null);
-            usuario.setToken(null);
-            usuarioService.save(usuario);
-            return ResponseEntity.ok("Senha redefinida com sucesso.");
-            } else {
-                return ResponseEntity.badRequest().body("Token expirado.");
+        if (usuarioOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("Token expirado.");
+        }
+
+        Usuario usuario = usuarioOpt.get();
+        String novaSenhaCriptografada = criptografiaSenha.criptografarSenha(novaSenha);
+
+        List<Senhas_Antigas> senhasAntigas = senhasAntigasService.findByCpf(usuario.getCpf());
+
+        for (Senhas_Antigas senhaAntiga : senhasAntigas) {
+            if (senhaAntiga.getSenha().equals(novaSenhaCriptografada)) {
+                return ResponseEntity.badRequest().body("A nova senha não pode ser igual a uma senha antiga.");
             }
         }
-        
+        usuario.setSenha_usuario(novaSenhaCriptografada);
+        usuario.setToken(null);
+        usuario.setSenhaToken(null);
+        Senhas_Antigas novaSenhaAntiga = new Senhas_Antigas(novaSenhaCriptografada, usuario);
+        usuario.getSenhasAntigas().add(novaSenhaAntiga);
+
+        usuarioService.save(usuario);
+
+        return ResponseEntity.ok("Senha redefinida com sucesso.");
+    }
+
+
     @PostMapping
     public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario) throws NoSuchAlgorithmException {
     	

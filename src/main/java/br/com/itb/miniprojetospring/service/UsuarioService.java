@@ -5,6 +5,7 @@ import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
 
+import br.com.itb.miniprojetospring.model.Senhas_Antigas;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +28,9 @@ public class UsuarioService {
     @Autowired
     private CriptografiaSenha criptografiaSenha;
 
+    @Autowired
+    private Senhas_AntigasService senhasAntigasService;
+
     TokenConstants tokenConstants;
 
     public UsuarioService(UsuarioRepository _usuarioRepository){
@@ -34,11 +38,19 @@ public class UsuarioService {
     }
 
     @Transactional
-    public Usuario save(Usuario _usuario) throws NoSuchAlgorithmException{
-    	String senhaCriptografada = criptografiaSenha.criptografarSenha(_usuario.getSenha_usuario());
+    public Usuario save(Usuario _usuario) throws NoSuchAlgorithmException {
+        String senhaCriptografada = criptografiaSenha.criptografarSenha(_usuario.getSenha_usuario());
         _usuario.setSenha_usuario(senhaCriptografada);
-        return usuarioRepository.save(_usuario);
+        Senhas_Antigas senhaAntiga = new Senhas_Antigas(senhaCriptografada, _usuario);
+        _usuario.setSenhasAntigas(List.of(senhaAntiga));
+
+        // Salva o usuário (com Cascade.ALL, também salva a senha antiga)
+        Usuario usuarioSalvo = usuarioRepository.save(_usuario);
+
+        return usuarioSalvo;
     }
+
+
 
     public Optional<Usuario> findByCpf(String cpf) {
         return usuarioRepository.findByCpf(cpf);

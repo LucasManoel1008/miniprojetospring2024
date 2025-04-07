@@ -5,12 +5,12 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name="Usuario")
@@ -48,10 +48,13 @@ public class Usuario {
 
 	@Column(name = "token")
 	private String token;
-	
+
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+	@JsonManagedReference
+	private List<Senhas_Antigas> senhasAntigas;
+
+
 	// CRIAR GETTERS E SETTERS
-
-
 	public String getnome_usuario() {
 		return nome_usuario;
 	}
@@ -62,8 +65,6 @@ public class Usuario {
 	public void setNome_usuario(String nome_usuario) {
 		this.nome_usuario = nome_usuario;
 	}
-
-
 
 	public Date getData_nascimento() {
 		return data_nascimento;
@@ -116,4 +117,13 @@ public class Usuario {
 		this.data_criacao_usuario = data_criacao_usuario;
 	}
 
+
+
+	public List<Senhas_Antigas> getSenhasAntigas() {
+		return senhasAntigas;
+	}
+
+	public void setSenhasAntigas(List<Senhas_Antigas> senhasAntigas) {
+		this.senhasAntigas = senhasAntigas;
+	}
 }

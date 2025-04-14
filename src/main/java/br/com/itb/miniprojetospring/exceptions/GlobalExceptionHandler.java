@@ -8,18 +8,28 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import br.com.itb.miniprojetospring.model.ErrorResponse;
+import br.com.itb.miniprojetospring.model.InvalidData;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
 	
 	 @ExceptionHandler(InvalidDataException.class)
-	    public ResponseEntity<ErrorResponse> handleInvalidDataException(InvalidDataException ex) {
-	        ErrorResponse errorResponse = new ErrorResponse(
+	    public ResponseEntity<InvalidData> handleInvalidDataException(InvalidDataException ex) {
+	        InvalidData invalidData = new InvalidData(
 	                ex.getMessage(),
 	                HttpStatus.BAD_REQUEST.value()
 	        );
-	        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+	        return new ResponseEntity<>(invalidData, HttpStatus.BAD_REQUEST);
 	    }
+	 
+	 @ExceptionHandler(DataAlredyRegistred.class)
+	    public ResponseEntity<InvalidData> handleDataAlreadyRegisteredException(DataAlredyRegistred ex) {
+	        InvalidData invalidData = new InvalidData(
+	                ex.getMessage(),
+	                HttpStatus.BAD_REQUEST.value()
+	        );
+	        return new ResponseEntity<>(invalidData, HttpStatus.BAD_REQUEST);
+	    }
+
 
 }

@@ -18,6 +18,8 @@ public class Usuario {
     public static final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 
+    
+
 	public Usuario(String cpf, String nome_usuario){
 		this.cpf = cpf;
 		this.nome_usuario = nome_usuario;

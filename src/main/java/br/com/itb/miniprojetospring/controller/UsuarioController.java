@@ -15,6 +15,7 @@ import br.com.itb.miniprojetospring.service.EmailService;
 import br.com.itb.miniprojetospring.service.Senhas_AntigasService;
 import br.com.itb.miniprojetospring.service.UsuarioService;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -121,9 +122,6 @@ public ResponseEntity<Object> atualizarSenha(
     // Atualiza o usuário no banco de dados
     usuarioService.update(usuario);
 
-    // Logs para debug
-
-
     return ResponseEntity.ok("Senha atualizada com sucesso.");
 }
 
@@ -134,9 +132,7 @@ public ResponseEntity<Object> atualizarSenha(
 
     @PostMapping
     public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario) throws NoSuchAlgorithmException {
-    	if (usuario.getSenha_usuario() == null) {
-    		throw new InvalidDataException("Dados inválidos.");
-    	}
+    	
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.save(usuario));
     }
 

@@ -2,14 +2,14 @@ package br.com.itb.miniprojetospring.model;
 
 import java.time.LocalDateTime;
 
-public class ErrorResponse {
+public class InvalidData {
 	private String message;
 	private int status;
 	private LocalDateTime timestamp;
 	
 	// Constructor
 	
-	public ErrorResponse(String message, int status) {
+	public InvalidData(String message, int status) {
 		super();
 		this.message = message;
 		this.status = status;

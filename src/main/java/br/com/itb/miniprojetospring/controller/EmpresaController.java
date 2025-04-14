@@ -5,6 +5,7 @@ import br.com.itb.miniprojetospring.model.Usuario;
 import br.com.itb.miniprojetospring.service.CriptografiaSenha;
 import br.com.itb.miniprojetospring.service.EmpresaService;
 import br.com.itb.miniprojetospring.service.UsuarioService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

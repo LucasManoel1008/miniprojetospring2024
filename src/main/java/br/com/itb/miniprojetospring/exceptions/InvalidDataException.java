@@ -6,9 +6,6 @@ public class InvalidDataException extends RuntimeException {
 		super(message);
 	}
 
-	public InvalidDataException(String message, Throwable cause) {
-		super(message, cause);
-	}
 	
 
 }

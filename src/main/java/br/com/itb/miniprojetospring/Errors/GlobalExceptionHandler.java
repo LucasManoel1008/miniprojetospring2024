@@ -1,4 +1,4 @@
-package br.com.itb.miniprojetospring.exceptions;
+package br.com.itb.miniprojetospring.Errors;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,7 +17,8 @@ public class GlobalExceptionHandler {
 	    public ResponseEntity<InvalidData> handleInvalidDataException(InvalidDataException ex) {
 	        InvalidData invalidData = new InvalidData(
 	                ex.getMessage(),
-	                HttpStatus.BAD_REQUEST.value()
+	                HttpStatus.BAD_REQUEST.value(),
+					ex.getType()
 	        );
 	        return new ResponseEntity<>(invalidData, HttpStatus.BAD_REQUEST);
 	    }
@@ -26,7 +27,8 @@ public class GlobalExceptionHandler {
 	    public ResponseEntity<InvalidData> handleDataAlreadyRegisteredException(DataAlredyRegistred ex) {
 	        InvalidData invalidData = new InvalidData(
 	                ex.getMessage(),
-	                HttpStatus.BAD_REQUEST.value()
+	                HttpStatus.BAD_REQUEST.value(),
+					ex.getType()
 	        );
 	        return new ResponseEntity<>(invalidData, HttpStatus.BAD_REQUEST);
 	    }

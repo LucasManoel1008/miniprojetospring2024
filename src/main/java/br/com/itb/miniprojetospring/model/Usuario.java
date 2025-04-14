@@ -128,4 +128,20 @@ public class Usuario {
 	public void setSenhasAntigas(List<Senhas_Antigas> senhasAntigas) {
 		this.senhasAntigas = senhasAntigas;
 	}
+
+	@Override
+	public String toString() {
+		return "Usuario {\n" +
+				"  cpf='" + cpf + "',\n" +
+				"  nome_usuario='" + nome_usuario + "',\n" +
+				"  data_nascimento=" + data_nascimento + ",\n" +
+				"  senha_usuario='" + senha_usuario + "',\n" +
+				"  email='" + email + "',\n" +
+				"  data_criacao_usuario=" + data_criacao_usuario + ",\n" +
+				"  senhaToken='" + senhaToken + "',\n" +
+				"  token='" + token + "',\n" +
+				"  senhasAntigas=" + senhasAntigas + "\n" +
+				'}';
+	}
+
 }

@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import br.com.itb.miniprojetospring.constants.MessageConstants;
-import br.com.itb.miniprojetospring.exceptions.InvalidDataException;
+import br.com.itb.miniprojetospring.Errors.InvalidDataException;
 import br.com.itb.miniprojetospring.model.Senhas_Antigas;
 import br.com.itb.miniprojetospring.model.Usuario;
 import br.com.itb.miniprojetospring.service.CriptografiaSenha;
@@ -132,8 +132,12 @@ public ResponseEntity<Object> atualizarSenha(
 
     @PostMapping
     public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario) throws NoSuchAlgorithmException {
-    	
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.save(usuario));
+    }
+    @PostMapping("validar-usuario")
+    public ResponseEntity<String> validarUsuario(@RequestBody Usuario usuario) {
+        usuarioService.verificarDadosUsuario(usuario);
+        return ResponseEntity.ok("ok");
     }
 
     // ==========================

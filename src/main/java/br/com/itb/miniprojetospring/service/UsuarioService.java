@@ -6,15 +6,17 @@ import java.util.List;
 import java.util.Optional;
 
 import br.com.itb.miniprojetospring.constants.TokenConstants;
-import br.com.itb.miniprojetospring.exceptions.DataAlredyRegistred;
+import br.com.itb.miniprojetospring.Errors.DataAlredyRegistred;
 import br.com.itb.miniprojetospring.model.Senhas_Antigas;
 import br.com.itb.miniprojetospring.model.Usuario;
 import br.com.itb.miniprojetospring.model.UsuarioRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import br.com.itb.miniprojetospring.Errors.InvalidDataException;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -71,7 +73,6 @@ public class UsuarioService {
     @Transactional
     public Usuario save(Usuario usuario) throws NoSuchAlgorithmException {
     	
-        usuarioValidationService.validarUsuarioParaCriacao(usuario);
         
         String senhaCriptografada = criptografiaSenha.criptografarSenha(usuario.getSenha_usuario());
         
@@ -82,6 +83,14 @@ public class UsuarioService {
         usuario.setSenhasAntigas(List.of(senhaAntiga));
 
         return usuarioRepository.save(usuario);
+    }
+
+    @Transactional
+    public void verificarDadosUsuario(Usuario usuario){
+        if (usuario == null) {
+            throw new InvalidDataException("Falha ao criar o usuário", "Usuario");
+        }
+        usuarioValidationService.validarUsuarioParaCriacao(usuario);
     }
 
     // ==========================

@@ -2,6 +2,8 @@
 <section name="Workbench">
 	<section name="MavenProjectImportWizardPage">
 		<list key="rootDirectory">
+			<item value="/home/lucas/Documents/TCC/miniprojetospring2024"/>
+			<item value="/home/lucas/Documents/TCC"/>
 			<item value="D:\EXEMPLOS\miniprojeto3cspring2023"/>
 		</list>
 		<list key="projectNameTemplate">

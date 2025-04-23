@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <libraryInfos>
     <libraryInfo home="C:\Program Files\Java\jdk-17" version="17"/>
+<<<<<<< HEAD
     <libraryInfo home="C:\Program Files\Java\jre-1.8" version="1.8.0_401">
         <bootpath>
             <entry path="C:\Program Files\Java\jre-1.8\lib\resources.jar"/>
@@ -20,6 +21,20 @@
         </endorsedDirs>
     </libraryInfo>
     <libraryInfo home="C:\Users\Lucas\.p2\pool\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_21.0.6.v20250130-0529\jre" version="21.0.6"/>
+=======
+    <libraryInfo home="/opt/sts-4.29.1.RELEASE/plugins/org.eclipse.justj.openjdk.hotspot.jre.full.linux.x86_64_21.0.6.v20250130-0529" version="21.0.6">
+        <bootpath>
+            <entry path="null"/>
+        </bootpath>
+        <extensionDirs>
+            <entry path="null"/>
+        </extensionDirs>
+        <endorsedDirs>
+            <entry path="null"/>
+        </endorsedDirs>
+    </libraryInfo>
+    <libraryInfo home="/usr/lib/jvm/java-17-openjdk-amd64" version="17.0.14"/>
+>>>>>>> 81be85bb62e4a96b88a4e529cfd6360adeeb3bf1
     <libraryInfo home="D:\sts-4.26.0.RELEASE\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_21.0.4.v20240802-1551" version="21.0.4">
         <bootpath>
             <entry path="null"/>
@@ -31,6 +46,7 @@
             <entry path="null"/>
         </endorsedDirs>
     </libraryInfo>
+<<<<<<< HEAD
     <libraryInfo home="C:\Program Files\Java\jdk-21" version="21.0.6"/>
     <libraryInfo home="C:\Users\Lucas\.p2\pool\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_21.0.6.v20250130-0529" version="21.0.6">
         <bootpath>
@@ -43,5 +59,9 @@
             <entry path="null"/>
         </endorsedDirs>
     </libraryInfo>
+=======
+    <libraryInfo home="/usr/lib/jvm/java-11-openjdk-amd64" version="11.0.26"/>
+>>>>>>> 81be85bb62e4a96b88a4e529cfd6360adeeb3bf1
     <libraryInfo home="D:\sts-4.26.0.RELEASE\plugins\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_21.0.4.v20240802-1551\jre" version="21.0.4"/>
+    <libraryInfo home="/opt/sts-4.29.1.RELEASE/plugins/org.eclipse.justj.openjdk.hotspot.jre.full.linux.x86_64_21.0.6.v20250130-0529/jre" version="21.0.6"/>
 </libraryInfos>

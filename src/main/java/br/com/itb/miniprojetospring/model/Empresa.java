@@ -136,6 +136,25 @@ public class Empresa {
     public void setCep(String cep) {
         this.cep = cep;
     }
+    
+    
+    @Override
+    public String toString() {
+		return "Empresa{" +
+				"cnpj='" + cnpj + '\'' +
+				", nome_empresa='" + nome_empresa + '\'' +
+				", telefone_empresa='" + telefone_empresa + '\'' +
+				", foto=" + (foto != null ? foto.length : 0) + " bytes" +
+				", rua='" + rua + '\'' +
+				", numero='" + numero + '\'' +
+				", bairro='" + bairro + '\'' +
+				", cidade='" + cidade + '\'' +
+				", cep='" + cep + '\'' +
+				", usuario=" + usuario +
+				", descricao_empresa='" + descricao_empresa + '\'' +
+				", data_criacao=" + data_criacao +
+				'}';
+	}
 }
 
 

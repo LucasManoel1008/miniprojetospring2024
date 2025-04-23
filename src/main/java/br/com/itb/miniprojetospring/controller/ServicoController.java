@@ -1,4 +1,4 @@
-package br.com.itb.miniprojetospring.control;
+package br.com.itb.miniprojetospring.controller;
 
 import java.time.Instant;
 import java.time.LocalDateTime;

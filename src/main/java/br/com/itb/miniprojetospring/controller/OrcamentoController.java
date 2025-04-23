@@ -1,4 +1,4 @@
-package br.com.itb.miniprojetospring.control;
+package br.com.itb.miniprojetospring.controller;
 
 import br.com.itb.miniprojetospring.model.Orcamento;
 import br.com.itb.miniprojetospring.model.Servico;

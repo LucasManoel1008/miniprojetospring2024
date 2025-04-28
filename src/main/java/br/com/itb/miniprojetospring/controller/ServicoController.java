@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import br.com.itb.miniprojetospring.model.Filtros;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -92,48 +93,20 @@ public class ServicoController {
         return ResponseEntity.ok(listarServicos);
     }
 
-    // Filtra serviços pelo filtro na tela "Servicos"
-    @GetMapping("/filtrar")
-    public ResponseEntity<List<Servico>> filtrarServicos(@RequestParam String categoria, @RequestParam Double valor, @RequestParam String data) {
-        List<Servico> filtrarServico = servicoService.findAll().stream()
-                .filter(servico -> categoria.equals("todas") || servico.getCategoria_servico().equalsIgnoreCase(categoria))
-                .filter(servico -> valor == 0 || Double.parseDouble(servico.getValor_estimado_servico()) < valor)
-                .map(this::setTempoServico)
-                .collect(Collectors.toList());
-       List<Servico> servicosFormatados = new ArrayList<>(servicoService.ordenarServico(filtrarServico, data));
-        System.out.println("serviços organizada: " + Arrays.toString(servicosFormatados.toArray()));
-        return ResponseEntity.ok(servicosFormatados);
-    }
+    @PostMapping("/filtrar")
+    public List<Servico> filtrarServicos(@RequestBody Filtros filtros) {
+        List<Servico> servicos = servicoService.findAll();
 
-    private Servico setTempoServico(Servico servico) {
-        Instant data = Instant.now();
-        ZoneId zoneId = ZoneId.of("America/Sao_Paulo");
-        LocalDateTime dataAtual = LocalDateTime.ofInstant(data, zoneId);
-        LocalDateTime dataDisponibilidade = servico.getDisponibilidade_servico().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
-        servico.setTempo_servico(servicoService.calcularTempoPassado(dataDisponibilidade, dataAtual));
-        return servico;
-    }
-
-    @GetMapping("/pesquisar-servico")
-    public ResponseEntity<List<Servico>> pesquisarServico(@RequestParam String nome) {
-        if (nome.equals("") || nome == null) {
-            return ResponseEntity.ok(listarServicosPorDisponibilidade().getBody());
+        if(filtros.getCategoria() != null){
+            servicos = servicos.stream()
+                    .filter(servico -> servico
+                            .getCriterios_servico()
+                            .equals(filtros
+                                    .getCategoria()))
+                    .collect(Collectors.toList());
         }
-        List<Servico> servicos = servicoService.findAll().stream()
-                .filter(servico -> servico.getNome_servico().toLowerCase().contains(nome.toLowerCase()))
-                .map(servico -> {
-                    LocalDateTime dataAtual = LocalDateTime.now();
-                    if (servico.getDisponibilidade_servico() != null) {
-                        LocalDateTime dataDisponibilidade = servico.getDisponibilidade_servico()
-                                .toInstant()
-                                .atZone(ZoneId.systemDefault())
-                                .toLocalDateTime();
-                        servico.setTempo_servico(servicoService.calcularTempoPassado(dataDisponibilidade, dataAtual));
-                    }
-                    return servico;
-                })
-                .collect(Collectors.toList());
-        return ResponseEntity.ok(servicos);
+
+        return (List<Servico>) servicos;
     }
 
 

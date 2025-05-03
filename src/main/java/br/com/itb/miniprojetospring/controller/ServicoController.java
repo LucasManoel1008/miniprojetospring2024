@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -94,20 +96,49 @@ public class ServicoController {
     }
 
     @PostMapping("/filtrar")
-    public List<Servico> filtrarServicos(@RequestBody Filtros filtros) {
+   public List<Servico> filtrarServicos(@RequestBody Filtros filtros) {
         List<Servico> servicos = servicoService.findAll();
 
-        if(filtros.getCategoria() != null){
+        if(filtros.getCategoria().isEmpty() == false){
             servicos = servicos.stream()
                     .filter(servico -> servico
-                            .getCriterios_servico()
+                            .getCategoria_servico()
                             .equals(filtros
                                     .getCategoria()))
                     .collect(Collectors.toList());
         }
+        if(filtros.getDataFiltro() != null){
+        	Date dataAtual = new Date();
+			switch(filtros.getDataFiltro()){
+				case RECENTES:
+					Collections.sort(servicos, (s1, s2) -> s2.getDisponibilidade_servico().compareTo(s1.getDisponibilidade_servico()));
+					break;
+				case ANTIGOS:
+					Collections.sort(servicos, (s1, s2) -> s1.getDisponibilidade_servico().compareTo(s2.getDisponibilidade_servico()));
+					break;
+			}
+		}
+        if(filtros.getPrecoMax() > 0){
+			servicos = servicos.stream()
+					.filter(servico -> servico
+							.getValor_estimado_servico()
+							<= filtros
+							.getPrecoMax())
+					.collect(Collectors.toList());
+		}
+        
+        if(filtros.getArea() != null){
+         servicos = servicos.stream()
+        		 .filter(servico -> servico
+						 .getLocal_servico()
+						 .equals(filtros
+								 .getArea()))
+        		 .collect(Collectors.toList());
+        }
+		
 
-        return (List<Servico>) servicos;
-    }
+        return servicos;
+    } 
 
 
 

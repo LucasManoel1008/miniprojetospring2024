@@ -33,7 +33,7 @@ public class Servico {
     private String categoria_servico;
     private String local_servico;
     private Date disponibilidade_servico;
-    private String valor_estimado_servico;
+    private Double valor_estimado_servico;
     private String criterios_servico;
     private String tempo_servico;
     // Chave Estrangeira - Empresa
@@ -80,11 +80,11 @@ public class Servico {
     public void setDisponibilidade_servico(Date disponibilidade_servico) {
         this.disponibilidade_servico = disponibilidade_servico;
     }
-    public String getValor_estimado_servico() {
+    public Double getValor_estimado_servico() {
         return valor_estimado_servico;
     }
 
-    public void setValor_estimado_servico(String valor_estimado_servico) {
+    public void setValor_estimado_servico(Double valor_estimado_servico) {
         this.valor_estimado_servico = valor_estimado_servico;
     }
 

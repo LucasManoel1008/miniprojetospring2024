@@ -111,10 +111,14 @@ public class ServicoController {
         	Date dataAtual = new Date();
 			switch(filtros.getDataFiltro()){
 				case RECENTES:
-					Collections.sort(servicos, (s1, s2) -> s2.getDisponibilidade_servico().compareTo(s1.getDisponibilidade_servico()));
+					servicos = servicos.stream()
+				    .sorted((s1, s2) -> s2.getDisponibilidade_servico().compareTo(s1.getDisponibilidade_servico()))
+				    .collect(Collectors.toList());
 					break;
 				case ANTIGOS:
-					Collections.sort(servicos, (s1, s2) -> s1.getDisponibilidade_servico().compareTo(s2.getDisponibilidade_servico()));
+					servicos = servicos.stream()
+				    .sorted((s1, s2) -> s1.getDisponibilidade_servico().compareTo(s2.getDisponibilidade_servico()))
+				    .collect(Collectors.toList());
 					break;
 			}
 		}
@@ -127,7 +131,7 @@ public class ServicoController {
 					.collect(Collectors.toList());
 		}
         
-        if(filtros.getArea() != null){
+        if(filtros.getArea().isEmpty() == false){
          servicos = servicos.stream()
         		 .filter(servico -> servico
 						 .getLocal_servico()

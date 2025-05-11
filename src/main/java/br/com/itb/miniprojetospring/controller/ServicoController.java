@@ -71,9 +71,14 @@ public class ServicoController {
         }
     }
 
-    @GetMapping
+    @GetMapping("/listar")
     public ResponseEntity<List<Servico>> getAllServicos() {
-        return ResponseEntity.ok(servicoService.findAll());
+    	List<Servico> servicos = servicoService.findAll();
+    	servicos = servicos.stream()
+    			.filter(service -> service.getStatus_servico() == true)
+    			.toList();
+    	return ResponseEntity.ok(servicos);
+        
     }
 
     // Filtra serviços por status == true e retorna quando foram públicados

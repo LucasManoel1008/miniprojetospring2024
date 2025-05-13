@@ -6,6 +6,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.itb.miniprojetospring.Enums.FiltrosEnums;
 import br.com.itb.miniprojetospring.model.Empresa;
 import br.com.itb.miniprojetospring.model.Servico;
 import br.com.itb.miniprojetospring.service.EmpresaService;
@@ -82,26 +84,10 @@ public class ServicoController {
     }
 
     // Filtra serviços por status == true e retorna quando foram públicados
-    @GetMapping("/listar-servicos")
-    public ResponseEntity<List<Servico>> listarServicosPorDisponibilidade() {
-        LocalDateTime dataAtual = LocalDateTime.now();
-
-        List<Servico> listarServicos = servicoService.findAll().stream()
-                .map(servico -> {
-                    if (servico.getDisponibilidade_servico() != null) {
-                        LocalDateTime dataDisponibilidade = servico.getDisponibilidade_servico().toInstant().atZone(ZoneId.of("America/Sao_Paulo")).toLocalDateTime();
-                        servico.setTempo_servico(servicoService.calcularTempoPassado(dataDisponibilidade, dataAtual));
-                    }
-                    return servico;
-                    
-                })
-                .collect(Collectors.toList());
-
-        return ResponseEntity.ok(listarServicos);
-    }
 
     @PostMapping("/filtrar")
    public List<Servico> filtrarServicos(@RequestBody Filtros filtros) {
+    	System.out.println(filtros);
         List<Servico> servicos = servicoService.findAll();
 
         if(filtros.getCategoria().isEmpty() == false){
@@ -112,21 +98,22 @@ public class ServicoController {
                                     .getCategoria()))
                     .collect(Collectors.toList());
         }
-        if(filtros.getDataFiltro() != null){
-        	Date dataAtual = new Date();
-			switch(filtros.getDataFiltro()){
-				case RECENTES:
-					servicos = servicos.stream()
-				    .sorted((s1, s2) -> s2.getDisponibilidade_servico().compareTo(s1.getDisponibilidade_servico()))
-				    .collect(Collectors.toList());
-					break;
-				case ANTIGOS:
-					servicos = servicos.stream()
-				    .sorted((s1, s2) -> s1.getDisponibilidade_servico().compareTo(s2.getDisponibilidade_servico()))
-				    .collect(Collectors.toList());
-					break;
-			}
-		}
+        if (filtros.getDataFiltro() != null || filtros.getDataFiltro() != FiltrosEnums.TODOS) {
+            Comparator<Servico> comparator = Comparator.comparing(
+                Servico::getDisponibilidade_servico,
+                Comparator.nullsLast(Comparator.naturalOrder())
+            );
+
+            if (filtros.getDataFiltro() == FiltrosEnums.RECENTES) {
+                comparator = comparator.reversed();
+            }
+
+            servicos = servicos.stream()
+                .sorted(comparator)
+                .collect(Collectors.toList());
+        }
+
+
         if(filtros.getPrecoMax() > 0){
 			servicos = servicos.stream()
 					.filter(servico -> servico
@@ -144,10 +131,31 @@ public class ServicoController {
 								 .getArea()))
         		 .collect(Collectors.toList());
         }
+        servicos = servicos.stream()
+				.filter(servico -> servico.getStatus_servico() == true)
+				.collect(Collectors.toList());
 		
 
         return servicos;
     } 
+    @PostMapping("/pesquisar")
+    public ResponseEntity<List<Servico>> pesquisarServicos(@RequestParam String pesquisa, @RequestBody List<Servico> servicos){
+    			List<Servico> servicosFiltrados = new ArrayList<>();
+    					if (pesquisa == null || pesquisa.isEmpty()) {
+    						return ResponseEntity.ok(servicos);
+    					}
+		for (Servico servico : servicos) {
+			if (servico.getNome_servico().toLowerCase().contains(pesquisa.toLowerCase())) {
+				servicosFiltrados.add(servico);
+			}
+		}
+
+		if (servicosFiltrados.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		} else {
+			return ResponseEntity.ok(servicosFiltrados);
+		}
+    }
 
 
 

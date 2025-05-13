@@ -52,4 +52,14 @@ public class Filtros {
     public void setArea(String area) {
         this.area = area;
     }
+    
+    @Override
+    public String toString() {
+		return "Filtros{" +
+				"categoria='" + categoria + '\'' +
+				", dataFiltro=" + dataFiltro +
+				", precoMax=" + precoMax +
+				", area='" + area + '\'' +
+				'}';
+	}
 }

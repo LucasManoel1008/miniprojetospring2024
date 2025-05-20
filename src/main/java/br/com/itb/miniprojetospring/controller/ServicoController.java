@@ -78,7 +78,7 @@ public class ServicoController {
     	List<Servico> servicos = servicoService.findAll();
     	servicos = servicos.stream()
     			.filter(service -> service.getStatus_servico() == true)
-    			.toList();
+    			.collect(Collectors.toList());
     	return ResponseEntity.ok(servicos);
         
     }
@@ -137,24 +137,6 @@ public class ServicoController {
 		
 
         return servicos;
-    } 
-    @PostMapping("/pesquisar")
-    public ResponseEntity<List<Servico>> pesquisarServicos(@RequestParam String pesquisa, @RequestBody List<Servico> servicos){
-    			List<Servico> servicosFiltrados = new ArrayList<>();
-    					if (pesquisa == null || pesquisa.isEmpty()) {
-    						return ResponseEntity.ok(servicos);
-    					}
-		for (Servico servico : servicos) {
-			if (servico.getNome_servico().toLowerCase().contains(pesquisa.toLowerCase())) {
-				servicosFiltrados.add(servico);
-			}
-		}
-
-		if (servicosFiltrados.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		} else {
-			return ResponseEntity.ok(servicosFiltrados);
-		}
     }
 
 

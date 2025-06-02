@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AdmRepository extends JpaRepository<Adm, String> {
-    String findByNome(String name);
+    Adm findByNome(String name);
 }

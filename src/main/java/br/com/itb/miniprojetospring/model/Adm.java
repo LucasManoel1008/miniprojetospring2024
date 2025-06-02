@@ -10,7 +10,7 @@ public class Adm {
     public Adm() {
     }
 
-    public Adm(Long id, String nome_adm, String senha_adm) {
+    public Adm(String id, String nome_adm, String senha_adm) {
         this.id = id;
         this.nome = nome_adm;
         this.senha_adm = senha_adm;
@@ -19,7 +19,7 @@ public class Adm {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private String id;
 
     @Column(name = "nome_adm")
     private String nome;

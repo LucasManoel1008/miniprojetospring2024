@@ -17,4 +17,9 @@ public class AdmService {
         return admRepository.save(adm);
     }
 
+    @Transactional
+    public Adm findByName(String name) {
+        return admRepository.findByNome(name);
+    }
+
 }

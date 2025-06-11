@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 public class Empresa {
 
     @Id
+    private long id;
+
     private String cnpj;
 
     private String nome_empresa;

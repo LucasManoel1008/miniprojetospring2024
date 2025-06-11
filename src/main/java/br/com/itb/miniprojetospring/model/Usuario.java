@@ -29,7 +29,8 @@ public class Usuario {
 	}
 	
 	@Id
-	@Column(name = "cpf",  nullable = false)
+	private long id;
+
 	private String cpf;
 
 	private String nome_usuario;
@@ -43,6 +44,7 @@ public class Usuario {
 	@Column(name = "email_usuario", nullable = false, unique = true, length = 100)
 	private String email;
 
+	private boolean nivel_acesso;
 
 	private LocalDateTime data_criacao_usuario;
 	@Column(name = "senha_token", nullable = true, updatable = false)

@@ -57,6 +57,11 @@ public class Usuario {
 	private List<Senhas_Antigas> senhasAntigas;
 
 
+	private int nivel_acesso = 1;
+
+	private boolean status_usuario = true;
+
+
 	// CRIAR GETTERS E SETTERS
 	public String getnome_usuario() {
 		return nome_usuario;
@@ -120,7 +125,17 @@ public class Usuario {
 		this.data_criacao_usuario = data_criacao_usuario;
 	}
 
+	public int getNivel_acesso() {
+		return nivel_acesso;
+	}
 
+	public void setNivel_acesso(int nivel_acesso) {
+		this.nivel_acesso = nivel_acesso;
+	}
+
+	public boolean isStatus_usuario() {
+		return status_usuario;
+	}
 
 	public List<Senhas_Antigas> getSenhasAntigas() {
 		return senhasAntigas;

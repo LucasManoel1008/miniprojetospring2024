@@ -2,12 +2,16 @@ package br.com.itb.miniprojetospring.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name = "Empresa")
 public class Empresa {
 
     @Id
+    @Column(columnDefinition = "uniqueidentifier", updatable = false, nullable = false)
+    private UUID id = UUID.randomUUID();
+
     private String cnpj;
 
     private String nome_empresa;
@@ -21,7 +25,7 @@ public class Empresa {
     private String cep;
 
     @OneToOne
-    @JoinColumn(name = "cpf_usuario")
+    @JoinColumn(name = "id_usuario")
     private Usuario usuario;
 
     private String descricao_empresa;

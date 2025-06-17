@@ -8,6 +8,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -27,15 +28,15 @@ public class Usuario {
 	public Usuario() {
 		this.data_criacao_usuario = Instant.now().atZone(ZoneId.of("America/Sao_Paulo")).toLocalDateTime();
 	}
-	
+
 	@Id
+	@Column(columnDefinition = "uniqueidentifier", updatable = false, nullable = false)
+	private UUID id = UUID.randomUUID();;
+
 	@Column(name = "cpf",  nullable = false)
 	private String cpf;
 
 	private String nome_usuario;
-
-
-	// Chave Estrangeira - Empresa
 
 
 	private Date data_nascimento;

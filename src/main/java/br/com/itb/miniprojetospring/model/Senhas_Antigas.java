@@ -3,18 +3,20 @@ package br.com.itb.miniprojetospring.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
+import java.util.UUID;
+
 @Entity
 public class Senhas_Antigas {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @Column(columnDefinition = "uniqueidentifier", updatable = false, nullable = false)
+    private UUID id = UUID.randomUUID();
 
     @Column(name = "senha", nullable = false)
     private String senha;
 
     @ManyToOne
-    @JoinColumn(name = "usuario_cpf") // ou cpf, se estiver usando como chave
+    @JoinColumn(name = "usuario_id") // ou cpf, se estiver usando como chave
     @JsonBackReference
     private Usuario usuario;
 
@@ -27,10 +29,10 @@ public class Senhas_Antigas {
     }
 
     // Getters e Setters
-    public long getId() {
+    public UUID getId() {
         return id;
     }
-    public void setId(long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

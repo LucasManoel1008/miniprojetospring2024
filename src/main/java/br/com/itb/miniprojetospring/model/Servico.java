@@ -38,7 +38,7 @@ public class Servico {
     private String tempo_servico;
     // Chave Estrangeira - Empresa
     @ManyToOne
-    @JoinColumn(name = "cnpj_empresa", referencedColumnName = "cnpj")
+    @JoinColumn(name = "id_empresa", referencedColumnName = "cnpj")
     private Empresa empresa;
     
     private Boolean status_servico;

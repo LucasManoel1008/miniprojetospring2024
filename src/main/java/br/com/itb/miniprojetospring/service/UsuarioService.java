@@ -110,7 +110,7 @@ public class UsuarioService {
     }
 
     public Optional<Usuario> findById(String cpf) {
-        return usuarioRepository.findById(cpf);
+        return usuarioRepository.findByCpf(cpf);
     }
 
     public Optional<Usuario> findByToken(String token) {
@@ -123,7 +123,7 @@ public class UsuarioService {
 
     @Transactional
     public Usuario update(Usuario usuario) {
-        return usuarioRepository.findById(usuario.getCpf())
+        return usuarioRepository.findByCpf(usuario.getCpf())
                 .map(usuarioEncontrado -> {
                     usuarioEncontrado.setNome_usuario(usuario.getnome_usuario());
                     try {

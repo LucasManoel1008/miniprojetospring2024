@@ -34,7 +34,7 @@ public class EmpresaService {
 
     @Transactional
     public Empresa update(Empresa empresa) {
-        return empresaRepository.findById(empresa.getCnpj())
+        return empresaRepository.findByCnpj(empresa.getCnpj())
                 .map(empresaEncontrada -> {
                     empresaEncontrada.setNome_empresa(empresa.getNome_empresa());
                     empresaEncontrada.setDescricao_empresa(empresa.getDescricao_empresa());
@@ -75,7 +75,7 @@ public class EmpresaService {
 
     @Transactional
     public boolean delete(Empresa empresa) {
-        return empresaRepository.findById(empresa.getCnpj())
+        return empresaRepository.findByCnpj(empresa.getCnpj())
                 .map(empresaEncontrada -> {
                     empresaRepository.delete(empresaEncontrada);
                     return true;

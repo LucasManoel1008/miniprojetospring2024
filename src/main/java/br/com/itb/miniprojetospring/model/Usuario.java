@@ -137,6 +137,10 @@ public class Usuario {
 		return status_usuario;
 	}
 
+	public void setStatus_usuario(boolean status_usuario) {
+		this.status_usuario = status_usuario;
+	}
+
 	public List<Senhas_Antigas> getSenhasAntigas() {
 		return senhasAntigas;
 	}

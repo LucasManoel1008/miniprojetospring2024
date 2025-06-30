@@ -113,6 +113,29 @@ public class EmpresaController {
         }
     }
 
+    @PutMapping("/{cnpj}/bloquear_cnpj")
+    public ResponseEntity<Object> bloquearEmpresa(@PathVariable String cnpj){
+        Optional<Empresa> empresaOptional = empresaService.findAllById(cnpj);
+        if (empresaOptional.isPresent()) {
+            Empresa empresa = empresaOptional.get();
+            empresa.getUsuario().setStatus_usuario(false);
+            empresaService.save(empresa);
+            return ResponseEntity.ok(empresa);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+    @PutMapping("/{cnpj}/desbloquear_cnpj")
+    public ResponseEntity<Object> desbloquearEmpresa(@PathVariable String cnpj){
+        Optional<Empresa> empresaOptional = empresaService.findAllById(cnpj);
+        if (empresaOptional.isPresent()) {
+            Empresa empresa = empresaOptional.get();
+            empresa.getUsuario().setStatus_usuario(true);
+            empresaService.save(empresa);
+            return ResponseEntity.ok(empresa);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
     // ==========================
     // ❌ Exclusão
     // ==========================

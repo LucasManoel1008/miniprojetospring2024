@@ -71,7 +71,11 @@ public class EmpresaController {
     public ResponseEntity<Empresa> realizarLogin(@PathVariable String cnpj, @RequestParam String senha) throws NoSuchAlgorithmException {
         Optional<Empresa> empresaOptional = empresaService.findAllById(cnpj);
         if (empresaOptional.isPresent()) {
+            if(!empresaOptional.get().getUsuario().isStatus_usuario()){
+                throw new NoSuchAlgorithmException("Usuário bloquead");
+            }
             String senhaCriptografada = criptografiaSenha.criptografarSenha(senha);
+
             if (empresaOptional.get().getUsuario().getSenha_usuario().equals(senhaCriptografada)) {
                 return ResponseEntity.ok(empresaOptional.get());
             } else {

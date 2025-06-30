@@ -68,21 +68,24 @@ public class EmpresaController {
     // ==========================
 
     @GetMapping("/login/{cnpj}")
-    public ResponseEntity<Empresa> realizarLogin(@PathVariable String cnpj, @RequestParam String senha) throws NoSuchAlgorithmException {
+    public ResponseEntity<Object> realizarLogin(@PathVariable String cnpj, @RequestParam String senha) throws NoSuchAlgorithmException {
         Optional<Empresa> empresaOptional = empresaService.findAllById(cnpj);
         if (empresaOptional.isPresent()) {
             if(!empresaOptional.get().getUsuario().isStatus_usuario()){
-                throw new NoSuchAlgorithmException("Usuário bloquead");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("{\"erro\": \"Conta bloqueada. Entre em contato com o suporte.\"}");
             }
             String senhaCriptografada = criptografiaSenha.criptografarSenha(senha);
 
             if (empresaOptional.get().getUsuario().getSenha_usuario().equals(senhaCriptografada)) {
                 return ResponseEntity.ok(empresaOptional.get());
             } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("{\"erro\": \"CNPJ ou senha incorretos.\"}");
             }
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body("{\"erro\": \"Empresa não encontrada.\"}");
     }
 
     // ==========================

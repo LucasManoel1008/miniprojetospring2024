@@ -1,6 +1,6 @@
-package br.com.itb.miniprojetospring.model;
+package br.com.itb.miniprojetospring.dto;
+import br.com.itb.miniprojetospring.Enums.FiltrosEnums;
 
-import br.com.itb.miniprojetospring.model.enums.FiltrosEnums;
 
 public class Filtros {
 
